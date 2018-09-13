@@ -131,6 +131,11 @@ namespace Gloom
             else                    return false;
         }
 
+        GLuint program_id()
+        {
+            return mProgram;
+        }
+
     private:
         // Disable copying and assignment
         Shader(Shader const &) = delete;
