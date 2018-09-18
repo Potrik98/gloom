@@ -7,11 +7,15 @@ class VertexArrayObject {
 public:
     VertexArrayObject(const unsigned int& vertex_count) {
         m_vertex_count = vertex_count;
+        m_index_count = 0;
         glGenVertexArrays(1, &m_id);
     }
 
+    VertexArrayObject() {}
+
     VertexArrayObject* indexArray(const int* indices,
                                   const unsigned int& index_count) {
+        m_index_count = index_count;
         glBindVertexArray(m_id);
 
         unsigned int idx_buf_id;
@@ -51,8 +55,13 @@ public:
         return this;
     }
 
-    GLuint id() { return m_id; }
+   void render() {
+        // TODO: enable rendering of VAOs without index buffers
+        glBindVertexArray(m_id);
+        glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
+   }
 private:
     GLuint m_id;
     unsigned int m_vertex_count;
+    unsigned int m_index_count;
 };
