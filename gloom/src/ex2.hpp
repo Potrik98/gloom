@@ -110,4 +110,52 @@ namespace ex2 {
             }
         }
     };
+
+    class Task3 : public Task1 {
+    public:
+        void init() {
+            // Create the shader program
+            m_shader.makeBasicShader("../gloom/shaders/matrix.vert",
+                                     "../gloom/shaders/color.frag");
+
+            m_location_a = glGetUniformLocation(m_shader.program_id(), "a");
+            m_location_b = glGetUniformLocation(m_shader.program_id(), "b");
+            m_location_c = glGetUniformLocation(m_shader.program_id(), "c");
+            m_location_d = glGetUniformLocation(m_shader.program_id(), "d");
+            m_location_e = glGetUniformLocation(m_shader.program_id(), "e");
+            m_location_f = glGetUniformLocation(m_shader.program_id(), "f");
+
+            
+            m_step = 0.0f;
+            init_vao();
+        }
+
+        void render() {
+            float a = cosf(m_step);
+            float b = -sinf(m_step);
+            float c = 0.0f;
+            float d = sinf(m_step);
+            float e = cosf(m_step);
+            float f = 0.0f;
+
+            glUniform1f(m_location_a, a);
+            glUniform1f(m_location_b, b);
+            glUniform1f(m_location_c, c);
+            glUniform1f(m_location_d, d);
+            glUniform1f(m_location_e, e);
+            glUniform1f(m_location_f, f);
+
+            BaseTask::render();
+
+            m_step += 0.0005f;
+        }
+    protected:
+        int m_location_a;
+        int m_location_b;
+        int m_location_c;
+        int m_location_d;
+        int m_location_e;
+        int m_location_f;
+        float m_step;
+    };
 }
