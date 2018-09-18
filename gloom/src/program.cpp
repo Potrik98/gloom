@@ -4,6 +4,9 @@
 #include "ex1.hpp"
 #include "ex2.hpp"
 
+// Here you can choose which task to run
+typedef ex2::Task1 TaskToRun;
+
 void runProgram(GLFWwindow* window)
 {
     // Enable depth (Z) buffer (accept "closest" fragment)
@@ -15,8 +18,8 @@ void runProgram(GLFWwindow* window)
 
     // Set default colour after clearing the colour buffer
     glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
-
-    ex1::Task3d task;
+    
+    TaskToRun task;
     task.init();
 
     // Rendering Loop
