@@ -27,6 +27,7 @@ void runProgram(GLFWwindow* window)
     // Set default colour after clearing the colour buffer
     glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
     
+    // initialize the task
     TaskToRun task;
     task.init();
 
@@ -36,6 +37,7 @@ void runProgram(GLFWwindow* window)
         // Clear colour and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // render the task
         task.render();
 
         // Handle other events

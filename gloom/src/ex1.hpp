@@ -58,7 +58,7 @@ namespace ex1 {
                 -0.8f, -0.2f, 1.2f
             };
 
-            int indices[] = {1, 2, 3};
+            int indices[] = {0, 1, 2};
 
             const int vertex_count = 3;
             const int index_count = 3;

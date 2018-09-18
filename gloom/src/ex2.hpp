@@ -18,9 +18,9 @@ namespace ex2 {
         void init_vao() {
             // Create a vao with a color attribute
             float vertices[] = {
-                0.6f, -0.8f, -1.2f,
-                0.0f, 0.4f, 0.0f,
-                -0.8f, -0.2f, 1.2f
+                0.4f, -0.2f, 0.0f,
+                0.0f, 0.6f, 0.0f,
+                -0.4f, -0.2f, 0.0f
             };
 
             float colors[] = {
@@ -29,7 +29,7 @@ namespace ex2 {
                 0.6f, 0.1f, 1.0f, 1.0f
             };
 
-            int indices[] = {1, 2, 3};
+            int indices[] = {0, 1, 2};
 
             const int vertex_count = 3;
             const int index_count = 3;
