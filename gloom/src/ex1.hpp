@@ -77,7 +77,16 @@ namespace ex1 {
         }
     };
 
-    class Task3a : public BaseTask {
+    class Task3a : public Task2a {
+    protected:
+        public:
+        void init() {
+            m_shader.makeBasicShader("../gloom/shaders/simple.vert", "../gloom/shaders/checkers.frag");
+            init_vao();
+        }
+    };
+
+    class Task3b : public BaseTask {
     protected:
         void init_vao() {
             m_vao = geometry::gen_circle_vao(
@@ -89,7 +98,7 @@ namespace ex1 {
         }
     };
 
-    class Task3b : public BaseTask {
+    class Task3c : public BaseTask {
     protected:
         void init_vao() {
             m_vao = geometry::gen_spiral_vao(

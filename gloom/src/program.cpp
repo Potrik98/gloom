@@ -25,7 +25,7 @@ void runProgram(GLFWwindow* window)
     int time = 0;
     */
 
-    ex1::Task2d task;
+    ex1::Task3a task;
     task.init();
 
     // Rendering Loop
