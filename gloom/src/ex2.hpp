@@ -28,7 +28,7 @@ namespace ex2 {
             const unsigned int component_count = 4;
             const unsigned int value_count = m_vao.getVertexCount() * component_count;
             float colors[value_count];
-            for (int i = 0; i < m_vao.getVertexCount(); ++i) {
+            for (unsigned int i = 0; i < m_vao.getVertexCount(); ++i) {
                 float r = 0.5f + 0.5f * cosf(i * 2.1f);
                 float g = 0.5f + 0.5f * cosf(i * 1.7f + 0.2f);
                 float b = 0.5f + 0.5f * cosf(i * 0.5f + 2.7f);
@@ -78,6 +78,7 @@ namespace ex2 {
             const unsigned int component_count = 3;
             const unsigned int color_components = 4;
 
+            // Add 3 rotated triangles
             const unsigned int triangle_count = 3;
             for (unsigned int i = 0; i < triangle_count; ++i) {
                 const float theta = 2.0f * 3.14159265f / triangle_count * i;
@@ -88,7 +89,9 @@ namespace ex2 {
                     vertex_count,
                     component_count,
                     theta
-                );
+                ); // Rotate by angle theta
+
+                // Update the z value and color of each triangle
                 float colors[vertex_count * color_components];
                 for (unsigned int v = 0; v < vertex_count; ++v) {
                     vertices[v * component_count + 2] = triangle_z[i];
@@ -96,6 +99,8 @@ namespace ex2 {
                         colors[v * color_components + c] = triangle_colors[i * color_components + c];
                     }
                 }
+
+                // Add the vao to the list
                 VertexArrayObject vao(vertex_count);
                 vao.indexArray(indices, index_count)
                   ->vertexArray(vertices, 3, 0)
