@@ -88,6 +88,8 @@ public:
         glBindVertexArray(m_id);
         glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
     }
+
+    unsigned int getVertexCount() { return m_vertex_count; }
 private:
     GLuint m_id;
     unsigned int m_vertex_count;

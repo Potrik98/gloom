@@ -3,6 +3,8 @@
 #include "vao.hpp"
 #include "gloom/shader.hpp"
 
+#include <vector>
+
 /*
  * Abstract class for tasks.
  * All tasks are initializable and renderable.
@@ -51,4 +53,38 @@ protected:
      * All implementations must initialize a vao.
      */
     virtual void init_vao() = 0;
+};
+
+/*
+ * Advanced task is an abstract class for more advanced tasks,
+ * containing more than one vao.
+ * The class handles rendering, and initalization of the default
+ * simple shader.
+ * All implementations must have initialize their own vaos.
+ * the abstract init_vaos method initializes the vaos. 
+ */
+class AdvancedTask : public Task {
+public:
+    void init() {
+        // Create a basic shader program
+        m_shader.makeBasicShader("../gloom/shaders/simple.vert",
+                                 "../gloom/shaders/simple.frag");
+        // Initialize the vao
+        init_vaos();
+    }
+
+    void render() {
+        // Activate the shader program and render the vao
+        m_shader.activate();
+        for (VertexArrayObject vao : m_vaos) { vao.render(); }
+    }
+protected:
+    std::vector<VertexArrayObject> m_vaos;
+    Gloom::Shader m_shader;
+
+    /*
+     * Abstract method.
+     * All implementations must initialize their vaos.
+     */
+    virtual void init_vaos() = 0;
 };
