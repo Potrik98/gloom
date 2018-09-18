@@ -10,11 +10,13 @@ namespace ex2 {
     public:
         void init() {
             // Create the shader program
-            m_shader.makeBasicShader("../gloom/shaders/color.vert", "../gloom/shaders/color.frag");
+            m_shader.makeBasicShader("../gloom/shaders/color.vert",
+                                     "../gloom/shaders/color.frag");
             init_vao();
         }
     protected:
         void init_vao() {
+            // Create a vao with a color attribute
             float vertices[] = {
                 0.6f, -0.8f, -1.2f,
                 0.0f, 0.4f, 0.0f,
@@ -35,8 +37,8 @@ namespace ex2 {
             // Create a vao
             m_vao = VertexArrayObject(vertex_count);
             m_vao.indexArray(indices, index_count) 
-                ->vertexArray(vertices, 3, 0)
-                ->vertexArray(colors, 4, 1);
+                ->vertexArray(vertices, 3, 0) // Vertices in location 0
+                ->vertexArray(colors, 4, 1); // Colors in location 1
         }
     };
 }

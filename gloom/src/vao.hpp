@@ -3,6 +3,19 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+/*
+ * Class for handling vertex array objects
+ * with an arbitrary amount of vertex attributes.
+ * Handles vao generation, binding of index and vertex buffers,
+ * and rendering of the vao.
+ * 
+ * Example usage:
+ * VertexArrayObject vao(vertex_count);
+ * vao.indexArray(indices, index_count) // binds the indices to the vao
+ *   ->vertexArray(vertices, 3, 0); // binds vertices to location 0, with component count 3
+ * 
+ * vao.render(); // renders the vao.
+ */
 class VertexArrayObject {
 public:
     VertexArrayObject(const unsigned int& vertex_count) {
@@ -11,8 +24,12 @@ public:
         glGenVertexArrays(1, &m_id);
     }
 
-    VertexArrayObject() {}
+    VertexArrayObject() {} // Default constructor required for simpler task initialization
 
+    /*
+     * Binds an index array to the vao.
+     * The vao will use this index array when rendering.
+     */
     VertexArrayObject* indexArray(const int* indices,
                                   const unsigned int& index_count) {
         m_index_count = index_count;
@@ -27,6 +44,10 @@ public:
         return this;
     }
 
+    /*
+     * Binds a vertex array to the vao in the given location.
+     * Takes in the vertex data, component count and location.
+     */
     VertexArrayObject* vertexArray(const float* vertices,
                                    const int& component_count,
                                    const int& location) {
@@ -42,6 +63,8 @@ public:
             vertices,
             GL_STATIC_DRAW
         );
+
+        // Set the attrib pointer for the location
         glVertexAttribPointer(
             location,
             component_count,
@@ -50,16 +73,21 @@ public:
             0,
             0
         );
+
+        // Enable attributes for the location
         glEnableVertexAttribArray(location);
 
         return this;
     }
 
-   void render() {
+    /*
+     * Render the vao
+     */
+    void render() {
         // TODO: enable rendering of VAOs without index buffers
         glBindVertexArray(m_id);
         glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
-   }
+    }
 private:
     GLuint m_id;
     unsigned int m_vertex_count;

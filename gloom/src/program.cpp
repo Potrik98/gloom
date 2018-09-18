@@ -4,7 +4,11 @@
 #include "ex1.hpp"
 #include "ex2.hpp"
 
-// Here you can choose which task to run
+/*
+ * Here you can choose which task to run.
+ * Change the type definition to the desired task.
+ * Code for the exercises are in the 'ex2.hpp' header
+ */
 typedef ex2::Task1 TaskToRun;
 
 void runProgram(GLFWwindow* window)
@@ -12,6 +16,10 @@ void runProgram(GLFWwindow* window)
     // Enable depth (Z) buffer (accept "closest" fragment)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
+
+    // Enable blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Configure miscellaneous OpenGL settings
     glEnable(GL_CULL_FACE);
