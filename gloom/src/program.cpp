@@ -84,6 +84,62 @@ int createVertexArrayObject(
     return vao_id;
 }
 
+int createVertexArrayObject(
+        const float* vertices,
+        const int* indices,
+        const int vertex_count,
+        const int component_count,
+        const int index_count,
+        const float* colors) {
+    // Generate vao
+    unsigned int vao_id;
+    glGenVertexArrays(1, &vao_id);
+
+    glBindVertexArray(vao_id);
+
+    // Vertex Buffer
+    unsigned int buf_id;
+    glGenBuffers(1, &buf_id);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buf_id);
+    glBufferData(GL_ARRAY_BUFFER, vertex_count * component_count * sizeof(float), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(
+            0, // location = 0
+            component_count, // vector components
+            GL_FLOAT, // float data
+            GL_FALSE,
+            0,
+            0
+    );
+    glEnableVertexAttribArray(0); // Enable location = 0
+
+    // Index buffer
+    unsigned int idx_buf_id;
+    glGenBuffers(1, &idx_buf_id);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idx_buf_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_count * sizeof(int), indices, GL_STATIC_DRAW);
+
+    // Color Buffer
+    unsigned int colorBuffer;
+    const unsigned int color_component_count = 4;
+    glGenBuffers(1, &colorBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, vertex_count * color_component_count * sizeof(float), colors, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(
+            1, // location = 1
+            color_component_count, // 4 components, rgba
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            0
+    );
+    glEnableVertexAttribArray(1); // enable location 1
+
+    return vao_id;
+}
+
 void get_task_1_vao(int& vao_id, int& index_count) {
     // Generate rotated triangles
     float v[] = {
@@ -148,6 +204,35 @@ void get_task_2_vao(int& vao_id, int& index_count) {
         vertex_count,
         3, // 3 components per vertex (xyz)
         index_count
+    );
+}
+
+void get_exercise_2_task_1_vao(int& vao_id, int& index_count) {
+    float vertices[] = {
+            0.6f, -0.8f, -1.2f,
+            0.0f, 0.4f, 0.0f,
+            -0.8f, -0.2f, 1.2f
+    };
+
+    float colors[] = {
+            0.1f, 0.8f, 0.4f, 1.0f,
+            1.0f, 0.4f, 0.2f, 1.0f,
+            0.6f, 0.1f, 1.0f, 1.0f
+    };
+
+    int indices[] = {1, 2, 3};
+
+    const int vertex_count = 3;
+    index_count = 3;
+
+    // Create a vao
+    vao_id = createVertexArrayObject(
+            vertices,
+            indices,
+            vertex_count,
+            3, // 3 components per vertex (xyz)
+            index_count,
+            colors
     );
 }
 
@@ -267,11 +352,11 @@ void runProgram(GLFWwindow* window)
 
     // Create the shader program
     Gloom::Shader shader;
-    shader.makeBasicShader("../gloom/shaders/simple.vert", "../gloom/shaders/simple.frag");
+    shader.makeBasicShader("../gloom/shaders/color.vert", "../gloom/shaders/color.frag");
 
     int vao_id;
     int index_count;
-    get_task_2_vao(vao_id, index_count);
+    get_exercise_2_task_1_vao(vao_id, index_count);
 
     // uniforms for task 3d
     const int location_r = glGetUniformLocation(shader.program_id(), "r");
