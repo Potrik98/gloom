@@ -4,6 +4,29 @@
 #include "math.h"
 
 namespace geometry {
+    /*
+     * Rotates the given vertices in x and y by theta
+     */
+    static void rotate_vertices(const float* vertices,
+                                float* out,
+                                const unsigned int& vertex_count,
+                                const unsigned int& component_count,
+                                const float& theta) {
+        const float c = cosf(theta);
+        const float s = sinf(theta);
+        for (unsigned int v = 0; v < vertex_count; ++v) {
+            const float x = vertices[v * component_count + 0];
+            const float y = vertices[v * component_count + 1];
+            const float xx = x * c - y * s;
+            const float yy = x * s + y * c;
+            out[v * component_count + 0] = xx;
+            out[v * component_count + 1] = yy;
+            for (unsigned int c = 2; c < component_count; ++c) {
+                out[v * component_count + c] = vertices[v * component_count + c];
+            }
+        }
+    }
+
     static VertexArrayObject gen_circle_vao(
         const float& center_x,
         const float& center_y,

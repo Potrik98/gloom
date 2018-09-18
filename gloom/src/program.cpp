@@ -9,7 +9,7 @@
  * Change the type definition to the desired task.
  * Code for the exercises are in the 'ex2.hpp' header
  */
-typedef ex2::Task1 TaskToRun;
+typedef ex2::Task2 TaskToRun;
 
 void runProgram(GLFWwindow* window)
 {
