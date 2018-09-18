@@ -2,49 +2,8 @@
 #include "program.hpp"
 #include "gloom/gloom.hpp"
 #include "gloom/shader.hpp"
+#include "vao.hpp"
 #include <math.h>
-
-int createVertexArrayObject(
-    const int* indices,
-    const int index_count,
-    const float* vertices,
-    const int* vertex_counts,
-    const int* component_counts,
-    const int attrib_count
-) {
-    // Generate vao
-    unsigned int vao_id;
-    glGenVertexArrays(1, &vao_id);
-
-    glBindVertexArray(vao_id);
-
-    // Vertex Buffers
-    for (int i = 0; i < attrib_count; ++i) {
-        unsigned int buf_id;
-        glGenBuffers(1, &buf_id);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buf_id);
-        glBufferData(GL_ARRAY_BUFFER, vertex_counts[i] * component_counts[i] * sizeof(float), vertices[i], GL_STATIC_DRAW);
-        glVertexAttribPointer(
-            0, // location = 0
-            component_counts[i], // vector components
-            GL_FLOAT, // float data
-            GL_FALSE,
-            0,
-            0
-        );
-        glEnableVertexAttribArray(i); // Enable location = 0
-    }
-
-    // Index buffer
-    unsigned int idx_buf_id;
-    glGenBuffers(1, &idx_buf_id);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idx_buf_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_count * sizeof(int), indices, GL_STATIC_DRAW);
-
-    return vao_id;
-}
 
 int createVertexArrayObject(
         const float* vertices,
@@ -226,14 +185,11 @@ void get_exercise_2_task_1_vao(int& vao_id, int& index_count) {
     index_count = 3;
 
     // Create a vao
-    vao_id = createVertexArrayObject(
-            vertices,
-            indices,
-            vertex_count,
-            3, // 3 components per vertex (xyz)
-            index_count,
-            colors
-    );
+    VertexArrayObject vao(vertex_count);
+    vao_id = vao.indexArray(indices, index_count)
+               ->vertexArray(vertices, 3, 0)
+               ->vertexArray(colors, 4, 1)
+               ->id();
 }
 
 void gen_circle_vao(int& vao_id, int& index_count) {
