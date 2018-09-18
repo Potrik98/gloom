@@ -13,7 +13,8 @@ class BaseTask : public Task {
 public:
     void init() {
         // Create the shader program
-        m_shader.makeBasicShader("../gloom/shaders/simple.vert", "../gloom/shaders/simple.frag");
+        m_shader.makeBasicShader("../gloom/shaders/simple.vert",
+                                 "../gloom/shaders/simple.frag");
         init_vao();
     }
 

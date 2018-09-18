@@ -72,7 +72,8 @@ namespace ex1 {
     class Task2d : public Task2a {
     public:
         void init() {
-            m_shader.makeBasicShader("../gloom/shaders/flip.vert", "../gloom/shaders/blue.frag");
+            m_shader.makeBasicShader("../gloom/shaders/flip.vert",
+                                     "../gloom/shaders/blue.frag");
             init_vao();
         }
     };
@@ -81,7 +82,8 @@ namespace ex1 {
     protected:
         public:
         void init() {
-            m_shader.makeBasicShader("../gloom/shaders/simple.vert", "../gloom/shaders/checkers.frag");
+            m_shader.makeBasicShader("../gloom/shaders/simple.vert",
+                                     "../gloom/shaders/checkers.frag");
             init_vao();
         }
     };
@@ -111,5 +113,40 @@ namespace ex1 {
                 0.05f // space
             );
         }
+    };
+
+    class Task3d : public Task2a {
+    public:
+        Task3d() {
+            m_ticks = 0;
+        }
+
+        void init() {
+            m_shader.makeBasicShader("../gloom/shaders/simple.vert",
+                                     "../gloom/shaders/uniform_color.frag");
+            m_location_r = glGetUniformLocation(m_shader.program_id(), "r");
+            m_location_g = glGetUniformLocation(m_shader.program_id(), "g");
+            m_location_b = glGetUniformLocation(m_shader.program_id(), "b");
+            init_vao();
+        }
+
+        void render() {
+            float r = 0.5f + 0.5f * cosf(m_ticks / 600.0f);
+            float g = 0.5f + 0.5f * cosf(m_ticks / 2000.0f + 0.3f);
+            float b = 0.5f + 0.5f * cosf(m_ticks / 9000.0f + 0.7f);
+
+            glUniform1f(m_location_r, r);
+            glUniform1f(m_location_g, g);
+            glUniform1f(m_location_b, b);
+
+            BaseTask::render();
+
+            ++m_ticks;
+        }
+    protected:
+        int m_location_r;
+        int m_location_g;
+        int m_location_b;
+        int m_ticks;
     };
 }
