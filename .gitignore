@@ -2,3 +2,4 @@
 !*/.gitkeep
 .idea/*
 cmake-build-debug/*
+.vscode/*

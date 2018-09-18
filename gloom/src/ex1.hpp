@@ -8,8 +8,6 @@
 
 namespace ex1 {
     class Task1 : public BaseTask {
-    public:
-        Task1() {}
     protected:
         void init_vao() {
             // Generate rotated triangles
@@ -51,9 +49,7 @@ namespace ex1 {
         }
     };
 
-    class Task2 : public BaseTask {
-    public:
-        Task2() {}
+    class Task2a : public BaseTask {
     protected:
         void init_vao() {
             float vertices[] = {
@@ -73,9 +69,15 @@ namespace ex1 {
         }
     };
 
-    class Task3a : public BaseTask {
+    class Task2d : public Task2a {
     public:
-        Task3a() {}
+        void init() {
+            m_shader.makeBasicShader("../gloom/shaders/flip.vert", "../gloom/shaders/blue.frag");
+            init_vao();
+        }
+    };
+
+    class Task3a : public BaseTask {
     protected:
         void init_vao() {
             m_vao = geometry::gen_circle_vao(
@@ -88,8 +90,6 @@ namespace ex1 {
     };
 
     class Task3b : public BaseTask {
-    public:
-        Task3b() {}
     protected:
         void init_vao() {
             m_vao = geometry::gen_spiral_vao(

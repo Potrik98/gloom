@@ -11,7 +11,7 @@ void runProgram(GLFWwindow* window)
     glDepthFunc(GL_LESS);
 
     // Configure miscellaneous OpenGL settings
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
 
     // Set default colour after clearing the colour buffer
     glClearColor(0.3f, 0.5f, 0.8f, 1.0f);
@@ -25,7 +25,7 @@ void runProgram(GLFWwindow* window)
     int time = 0;
     */
 
-    ex2::Task1 task;
+    ex1::Task2d task;
     task.init();
 
     // Rendering Loop

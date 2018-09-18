@@ -8,7 +8,6 @@
 namespace ex2 {
     class Task1 : public BaseTask {
     public:
-        Task1() {}
         void init() {
             // Create the shader program
             m_shader.makeBasicShader("../gloom/shaders/color.vert", "../gloom/shaders/color.frag");

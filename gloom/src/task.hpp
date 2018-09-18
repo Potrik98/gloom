@@ -5,15 +5,12 @@
 
 class Task {
 public:
-    Task() {}
     virtual void init() = 0;
     virtual void render() = 0;
 };
 
 class BaseTask : public Task {
 public:
-    BaseTask() {}
-
     void init() {
         // Create the shader program
         m_shader.makeBasicShader("../gloom/shaders/simple.vert", "../gloom/shaders/simple.frag");
