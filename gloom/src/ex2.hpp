@@ -193,6 +193,7 @@ namespace ex2 {
         }
 
         void render() {
+            m_camera.update();
             glm::mat4 matrix = m_matrix * m_camera.getViewMatrix();
             m_shader.activate();
             glUniformMatrix4fv(
