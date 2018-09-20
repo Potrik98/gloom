@@ -5,6 +5,7 @@
 #include "gloom/shader.hpp"
 #include "vao.hpp"
 #include "geometry.hpp"
+#include "camera.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -192,17 +193,19 @@ namespace ex2 {
         }
 
         void render() {
+            glm::mat4 matrix = m_matrix * m_camera.getViewMatrix();
             m_shader.activate();
             glUniformMatrix4fv(
                 m_location_matrix, // location
                 1, // count: 1 matrix
                 GL_FALSE, // do not transpose
-                glm::value_ptr(m_matrix) // pointer to the matrix data
+                glm::value_ptr(matrix) // pointer to the matrix data
             );
             m_vao.render();
         }
     protected:
         int m_location_matrix;
+        Camera m_camera;
         glm::mat4 m_matrix;
     };
 }
