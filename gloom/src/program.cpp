@@ -38,7 +38,7 @@ void runProgram(GLFWwindow* window)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // render the task
-        task.render();
+        task.render(window);
 
         // Handle other events
         glfwPollEvents();

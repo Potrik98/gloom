@@ -5,8 +5,9 @@
 #include "gloom/shader.hpp"
 #include "vao.hpp"
 #include "geometry.hpp"
-#include <iostream>
+#include "mycamera.hpp"
 
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -210,12 +211,10 @@ namespace ex2 {
             m_shader.makeBasicShader("../gloom/shaders/matrix.vert",
                                      "../gloom/shaders/simple.frag");
             m_location_matrix = glGetUniformLocation(m_shader.program_id(), "matrix");
+            camera.init();
 
-            m_matrix = glm::mat4(1.0f);
+            m_matrix = glm::mat4x4(1.0f);
             
-            m_pos = glm::vec3();
-            m_rotation = glm::vec3();
-
             m_perspective_matrix = glm::perspective(
                 0.87266f, 
                 1.33f, 
@@ -225,44 +224,67 @@ namespace ex2 {
             init_vao();
         }
 
-        void render() {
+        void render(GLFWwindow* window) {
+            handleKeyboardInput(window); // Handling keyboard input
 
-            glUniformMatrix4fv(m_location_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_matrix));
+            glm::mat4x4 matrix = m_matrix * camera.getCameraMatrix();
+
+            glUniformMatrix4fv(m_location_matrix, 1, GL_FALSE, glm::value_ptr(matrix));
 
             BaseTask::render();
         }
 
-        void moveUp() {
-            m_pos.x += 0.1;
-        }
-
-        void moveDown() {
-            m_pos.x -= 0.1;
-        }
-
-    void handleKeyboardInput(GLFWwindow* window)
-    {
-        // Use escape key for terminating the GLFW window
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        void handleKeyboardInput(GLFWwindow* window)
         {
-            glfwSetWindowShouldClose(window, GL_TRUE);
-        }
-        
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-            moveUp();
-        }
+            // Use escape key for terminating the GLFW window
+            if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            {
+                glfwSetWindowShouldClose(window, GL_TRUE);
+            }
+            
+            if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+                camera.moveUp();
+            }
 
-        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            moveDown();
+            if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+            {
+                camera.moveDown();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+                camera.moveRight();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+            {
+                camera.moveLeft();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+                camera.rotatePositiveY();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            {
+                camera.rotateNegativeX();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+                camera.rotateNegativeY();
+            }
+
+            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            {
+                camera.rotatePositiveX();
+            }
         }
-    }
     protected:
         int m_location_matrix;
         glm::mat4 m_matrix;
         glm::mat4x4 m_perspective_matrix;
         glm::vec3 m_pos;
         glm::vec3 m_rotation;
+        MyCamera camera;
     };
 
 
