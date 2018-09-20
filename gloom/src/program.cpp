@@ -1,6 +1,7 @@
 // Local headers
 #include "program.hpp"
 #include "gloom/gloom.hpp"
+#include "input.hpp"
 #include "ex1.hpp"
 #include "ex2.hpp"
 
@@ -13,6 +14,9 @@ typedef ex2::Task4 TaskToRun;
 
 void runProgram(GLFWwindow* window)
 {
+    // Initialize input singleton instance with the window handle
+    Input::getInstance(window);
+
     // Enable depth (Z) buffer (accept "closest" fragment)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);

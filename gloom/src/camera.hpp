@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -12,6 +13,10 @@ public:
         res = glm::rotate(res, -m_rotation.z, glm::vec3(0,0,1)); // rotate z
         res = glm::translate(res, -m_position);
         return res;
+    }
+
+    void update() {
+
     }
 private:
     glm::vec3 m_position;
