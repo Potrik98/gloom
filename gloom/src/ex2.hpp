@@ -5,6 +5,11 @@
 #include "gloom/shader.hpp"
 #include "vao.hpp"
 #include "geometry.hpp"
+#include <iostream>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "math.h"
 
@@ -158,4 +163,109 @@ namespace ex2 {
         int m_location_f;
         float m_step;
     };
+
+
+    class Task4 : public Task1 {
+    public:
+        void init() {
+            // Create the shader program
+            m_shader.makeBasicShader("../gloom/shaders/matrix.vert",
+                                     "../gloom/shaders/simple.frag");
+            m_location_matrix = glGetUniformLocation(m_shader.program_id(), "matrix");
+            /*float m_matrix_vals[] = {
+                1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 1.0f, 0.0f,
+                0.0f,  0.0f, 0.0f, 1.0f,
+            };*/
+
+            m_matrix = glm::mat4(1.0f);
+
+            m_perspective_matrix = glm::perspective(
+                0.87266f, 
+                1.33f, 
+                1.0f, 
+                100.0f);
+
+            init_vao();
+        }
+
+        void render() {
+
+            glUniformMatrix4fv(m_location_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_matrix));
+
+            BaseTask::render();
+        }
+    protected:
+        int m_location_matrix;
+        glm::mat4 m_matrix;
+        glm::mat4x4 m_perspective_matrix;
+    };
+
+
+    class Task4c : public Task1 {
+    public:
+        void init() {
+            // Create the shader program
+            m_shader.makeBasicShader("../gloom/shaders/matrix.vert",
+                                     "../gloom/shaders/simple.frag");
+            m_location_matrix = glGetUniformLocation(m_shader.program_id(), "matrix");
+
+            m_matrix = glm::mat4(1.0f);
+            
+            m_pos = glm::vec3();
+            m_rotation = glm::vec3();
+
+            m_perspective_matrix = glm::perspective(
+                0.87266f, 
+                1.33f, 
+                1.0f, 
+                100.0f);
+
+            init_vao();
+        }
+
+        void render() {
+
+            glUniformMatrix4fv(m_location_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_matrix));
+
+            BaseTask::render();
+        }
+
+        void moveUp() {
+            m_pos.x += 0.1;
+        }
+
+        void moveDown() {
+            m_pos.x -= 0.1;
+        }
+
+    void handleKeyboardInput(GLFWwindow* window)
+    {
+        // Use escape key for terminating the GLFW window
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            glfwSetWindowShouldClose(window, GL_TRUE);
+        }
+        
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+            moveUp();
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            moveDown();
+        }
+    }
+    protected:
+        int m_location_matrix;
+        glm::mat4 m_matrix;
+        glm::mat4x4 m_perspective_matrix;
+        glm::vec3 m_pos;
+        glm::vec3 m_rotation;
+    };
+
+
+
+
 }

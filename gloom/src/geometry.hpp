@@ -33,7 +33,7 @@ namespace geometry {
         const float& radius,
         const unsigned int& corners
     ) {
-        const float z = 0.0f;
+        const float z = -2.0f;
         const float scale_x = 3.0f / 4.0f; // Scale in x with the aspect ratio, because the coords are between -1 and 1 in both directions
         const unsigned int vertex_count = corners + 1; // One for the center aswell
         float vertices[3 * vertex_count];
