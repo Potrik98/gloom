@@ -15,11 +15,11 @@ uniform float f;
 void main()
 {
     mat4 matrix = mat4(
-          a,   b, 0.0,   c,
-          d,   e, 0.0,   f,
+          a,   d, 0.0, 0.0,
+          b,   e, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    );
+          c,   f, 0.0, 1.0
+    ); // OpenGL matrices are column major
     vertex_color = vertex_color_in;
     gl_Position = matrix * vec4(position, 1.0);
 }

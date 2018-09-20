@@ -30,19 +30,14 @@ namespace ex2 {
                 5 // corners
             );
             const unsigned int color_component_count = 4;
-            const unsigned int value_count = m_vao.getVertexCount() * color_component_count;
-            float colors[value_count];
-            // Generate some colors using some formulas
-            for (unsigned int i = 0; i < m_vao.getVertexCount(); ++i) {
-                float r = 0.5f + 0.5f * cosf(i * 2.1f);
-                float g = 0.5f + 0.5f * cosf(i * 1.7f + 0.2f);
-                float b = 0.5f + 0.5f * cosf(i * 0.5f + 2.7f);
-                float a = 1.0f;
-                colors[color_component_count * i + 0] = r;
-                colors[color_component_count * i + 1] = g;
-                colors[color_component_count * i + 2] = b;
-                colors[color_component_count * i + 3] = a;
-            }
+            float colors[] = {
+                1.0f, 0.0f, 0.0f, 1.0f,
+                1.0f, 1.0f, 0.0f, 1.0f,
+                0.0f, 1.0f, 1.0f, 1.0f,
+                0.5f, 0.0f, 1.0f, 1.0f,
+                0.6f, 1.0f, 0.1f, 1.0f,
+                0.8f, 0.2f, 0.4f, 1.0f
+            };
             m_vao.vertexArray(colors, color_component_count, 1); // Add colors to location 1
         }
     };
