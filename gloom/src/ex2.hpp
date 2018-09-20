@@ -184,12 +184,6 @@ namespace ex2 {
                 1.0f, // Near plane
                 100.0f // Far plane
             );
-
-            // Translate the object so it is visible
-            glm::mat4 translation;
-            translation = glm::translate(translation, glm::vec3(0, 0, -2.0f));
-
-            m_matrix = m_matrix * translation;
         }
 
         void render() {

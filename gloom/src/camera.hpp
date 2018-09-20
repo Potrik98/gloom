@@ -10,6 +10,8 @@ class Camera {
 public:
     glm::mat4 getViewMatrix() {
         glm::mat4 res;
+        // Apply rotation in the three axises, and translate the camera
+        // (Multiplies the transformation matrices into one view matrix)
         res = glm::rotate(res, -m_rotation.x, glm::vec3(1,0,0)); // rotate x
         res = glm::rotate(res, -m_rotation.y, glm::vec3(0,1,0)); // rotate y
         res = glm::rotate(res, -m_rotation.z, glm::vec3(0,0,1)); // rotate z
@@ -32,7 +34,7 @@ public:
         if (Input::getInstance().getKeyState(GLFW_KEY_DOWN)) m_rotation.x -= m_rotation_speed;
     }
 private:
-    glm::vec3 m_position;
+    glm::vec3 m_position = glm::vec3(0, 0, 2);
     glm::vec3 m_rotation;
     float m_speed = 0.001f;
     float m_rotation_speed = 0.0007f;
