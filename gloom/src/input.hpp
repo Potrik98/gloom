@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-#define KEY_COUNT 256
+#define KEY_COUNT 512
 
 /*
  * Singleton class for handling input and managing input state
