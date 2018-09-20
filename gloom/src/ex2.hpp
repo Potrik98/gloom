@@ -6,6 +6,9 @@
 #include "vao.hpp"
 #include "geometry.hpp"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "math.h"
 
 namespace ex2 {
@@ -25,24 +28,25 @@ namespace ex2 {
                 0.5f, // radius
                 5 // corners
             );
-            const unsigned int component_count = 4;
-            const unsigned int value_count = m_vao.getVertexCount() * component_count;
+            const unsigned int color_component_count = 4;
+            const unsigned int value_count = m_vao.getVertexCount() * color_component_count;
             float colors[value_count];
+            // Generate some colors using some formulas
             for (unsigned int i = 0; i < m_vao.getVertexCount(); ++i) {
                 float r = 0.5f + 0.5f * cosf(i * 2.1f);
                 float g = 0.5f + 0.5f * cosf(i * 1.7f + 0.2f);
                 float b = 0.5f + 0.5f * cosf(i * 0.5f + 2.7f);
                 float a = 1.0f;
-                colors[component_count * i + 0] = r;
-                colors[component_count * i + 1] = g;
-                colors[component_count * i + 2] = b;
-                colors[component_count * i + 3] = a;
+                colors[color_component_count * i + 0] = r;
+                colors[color_component_count * i + 1] = g;
+                colors[color_component_count * i + 2] = b;
+                colors[color_component_count * i + 3] = a;
             }
-            m_vao.vertexArray(colors, component_count, 1); // Add colors to location 1
+            m_vao.vertexArray(colors, color_component_count, 1); // Add colors to location 1
         }
     };
 
-    class Task2 : public AdvancedTask {
+    class Task2 : public AdvancedTask { // Advanced tasks contain multiple vaos
     public:
         void init() {
             // Create a basic shader program
@@ -53,25 +57,27 @@ namespace ex2 {
         }
     protected:
         virtual void init_vaos() {
+            // The vertices of one triangle
             float triangle_vertices[] = {
                 0.5f, 0.0f, 0.0f,
                 -0.5f, 0.3f, 0.0f,
                 -0.5f, -0.3f, 0.0f
             };
+            int indices[] = {0, 1, 2};
 
+            // The colors of each triangle
             float triangle_colors[] = {
                 1.0f, 0.5f, 0.0f, 0.7f,
                 0.5f, 0.1f, 1.0f, 0.7f,
                 0.2f, 0.7f, 0.7f, 0.7f
             };
 
+            // The z value of each triangle
             float triangle_z[] = {
                 0.9f,
                 0.8f,
                 0.7f
             };
-
-            int indices[] = {0, 1, 2};
 
             const unsigned int vertex_count = 3;
             const unsigned int index_count = 3;
@@ -111,7 +117,7 @@ namespace ex2 {
         }
     };
 
-    class Task3 : public Task1 {
+    class Task3 : public Task1 { // Extend task 1 to use the vao
     public:
         void init() {
             // Create the shader program
@@ -138,6 +144,8 @@ namespace ex2 {
             float e = cosf(m_step);
             float f = 0.0f;
 
+            m_shader.activate();
+
             glUniform1f(m_location_a, a);
             glUniform1f(m_location_b, b);
             glUniform1f(m_location_c, c);
@@ -145,7 +153,7 @@ namespace ex2 {
             glUniform1f(m_location_e, e);
             glUniform1f(m_location_f, f);
 
-            BaseTask::render();
+            m_vao.render();
 
             m_step += 0.0005f;
         }
@@ -157,5 +165,44 @@ namespace ex2 {
         int m_location_e;
         int m_location_f;
         float m_step;
+    };
+
+    class Task4 : public Task1 { // Extend task 1 to use the vao
+    public:
+        void init() {
+            // Create the shader program
+            m_shader.makeBasicShader("../gloom/shaders/uniform_matrix.vert",
+                                     "../gloom/shaders/simple.frag");
+
+            m_location_matrix = glGetUniformLocation(m_shader.program_id(), "matrix");
+            init_vao();
+
+            m_matrix = glm::perspective(
+                0.87266f, // FOV Y = 50 degrees
+                ((float) windowWidth) / windowHeight, // Aspect ratio
+                1.0f, // Near plane
+                100.0f // Far plane
+            );
+
+            // Translate the object so it is visible
+            glm::mat4 translation;
+            translation = glm::translate(translation, glm::vec3(0, 0, -2.0f));
+
+            m_matrix = m_matrix * translation;
+        }
+
+        void render() {
+            m_shader.activate();
+            glUniformMatrix4fv(
+                m_location_matrix, // location
+                1, // count: 1 matrix
+                GL_FALSE, // do not transpose
+                glm::value_ptr(m_matrix) // pointer to the matrix data
+            );
+            m_vao.render();
+        }
+    protected:
+        int m_location_matrix;
+        glm::mat4 m_matrix;
     };
 }
