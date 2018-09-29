@@ -52,7 +52,7 @@ namespace geometry {
         }
 
         const unsigned int index_count = 3 * corners;
-        int indices[index_count];
+        unsigned int indices[index_count];
         for (unsigned int i = 0; i < corners; ++i) {
             indices[3 * i + 0] = 0;
             indices[3 * i + 1] = 1 + i;
@@ -100,7 +100,7 @@ namespace geometry {
         }
 
         const int index_count = 3 * corners * 2 * loops;
-        int indices[index_count];
+        unsigned int indices[index_count];
         unsigned int index = 0;
         for (unsigned int i = 0; i < loops; ++i) {
             unsigned const int end = i == loops - 1 ? corners - 1 : corners; // Skip the last edge due to overflow

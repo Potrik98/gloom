@@ -39,8 +39,8 @@ namespace ex1 {
             }
             
             const unsigned int index_count = vertex_count;
-            int indices[vertex_count];
-            for (int i = 0; i < vertex_count; i++) {
+            unsigned int indices[vertex_count];
+            for (unsigned int i = 0; i < vertex_count; i++) {
                 indices[i] = i;
             }
             m_vao = VertexArrayObject(vertex_count);
@@ -58,7 +58,7 @@ namespace ex1 {
                 -0.8f, -0.2f, 1.2f
             };
 
-            int indices[] = {0, 1, 2};
+            const unsigned int indices[] = {0, 1, 2};
 
             const int vertex_count = 3;
             const int index_count = 3;

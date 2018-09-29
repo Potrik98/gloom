@@ -54,22 +54,22 @@ namespace ex2 {
     protected:
         virtual void init_vaos() {
             // The vertices of one triangle
-            float triangle_vertices[] = {
+            const float triangle_vertices[] = {
                 0.5f, 0.0f, 0.0f,
                 -0.5f, 0.3f, 0.0f,
                 -0.5f, -0.3f, 0.0f
             };
-            int indices[] = {0, 1, 2};
+            const unsigned int indices[] = {0, 1, 2};
 
             // The colors of each triangle
-            float triangle_colors[] = {
+            const float triangle_colors[] = {
                 1.0f, 0.5f, 0.0f, 0.7f,
                 0.5f, 0.1f, 1.0f, 0.7f,
                 0.2f, 0.7f, 0.7f, 0.7f
             };
 
             // The z value of each triangle
-            float triangle_z[] = {
+            const float triangle_z[] = {
                 0.9f,
                 0.8f,
                 0.7f
