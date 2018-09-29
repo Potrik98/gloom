@@ -107,14 +107,7 @@ public:
                                    const unsigned int& location) {
         const unsigned int component_count = 3;
         const unsigned int vertex_count = vertices.size();
-        float vertex_data[vertex_count * component_count];
-        int index = 0;
-        for (float3 v : vertices) {
-            vertex_data[index++] = v.x;
-            vertex_data[index++] = v.y;
-            vertex_data[index++] = v.z;
-        }
-        return this->vertexArray(vertex_data,
+        return this->vertexArray(reinterpret_cast<const float*>(&vertices[0]),
                                  vertex_count,
                                  component_count,
                                  location);
@@ -128,15 +121,7 @@ public:
                                    const unsigned int& location) {
         const unsigned int component_count = 4;
         const unsigned int vertex_count = vertices.size();
-        float vertex_data[vertex_count * component_count];
-        int index = 0;
-        for (float4 v : vertices) {
-            vertex_data[index++] = v.x;
-            vertex_data[index++] = v.y;
-            vertex_data[index++] = v.z;
-            vertex_data[index++] = v.w;
-        }
-        return this->vertexArray(vertex_data,
+        return this->vertexArray(reinterpret_cast<const float*>(&vertices[0]),
                                  vertex_count,
                                  component_count,
                                  location);
