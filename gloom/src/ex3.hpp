@@ -17,8 +17,12 @@ namespace ex3 {
     public:
         void init() override {
             MinecraftCharacter character = loadMinecraftCharacterModel("../gloom/res/steve.obj");
-            VertexArrayObject head = vaoFromMesh(character.head);
-            m_vao = head;
+            m_head = vaoFromMesh(character.head);
+            m_body = vaoFromMesh(character.torso);
+            m_arm_left = vaoFromMesh(character.leftArm);
+            m_arm_right = vaoFromMesh(character.rightArm);
+            m_leg_left = vaoFromMesh(character.leftLeg);
+            m_leg_right = vaoFromMesh(character.rightLeg);
 
             // Create a basic shader program
             m_shader.makeBasicShader("../gloom/shaders/shader.vert",
@@ -31,6 +35,8 @@ namespace ex3 {
                     1.0f, // Near plane
                     100.0f // Far plane
             );
+
+            m_camera.set_speed(0.01f);
         }
 
         void render() override {
@@ -45,12 +51,22 @@ namespace ex3 {
                     GL_FALSE, // do not transpose
                     glm::value_ptr(transformation) // pointer to the matrix data
             );
-            m_vao.render();
+            m_head.render();
+            m_body.render();
+            m_arm_left.render();
+            m_arm_right.render();
+            m_leg_left.render();
+            m_leg_right.render();
         }
     protected:
         Gloom::Shader m_shader;
         GLuint m_location_matrix;
-        VertexArrayObject m_vao;
+        VertexArrayObject m_head;
+        VertexArrayObject m_body;
+        VertexArrayObject m_arm_left;
+        VertexArrayObject m_arm_right;
+        VertexArrayObject m_leg_left;
+        VertexArrayObject m_leg_right;
         glm::mat4 m_projection_matrix;
         Camera m_camera;
     };
