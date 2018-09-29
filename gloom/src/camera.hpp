@@ -33,6 +33,10 @@ public:
         if (Input::getInstance().getKeyState(GLFW_KEY_UP)) m_rotation.x += m_rotation_speed;
         if (Input::getInstance().getKeyState(GLFW_KEY_DOWN)) m_rotation.x -= m_rotation_speed;
     }
+
+    void set_speed(const float& speed) {
+        m_speed = speed;
+    }
 private:
     glm::vec3 m_position = glm::vec3(0, 0, 2);
     glm::vec3 m_rotation;

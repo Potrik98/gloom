@@ -142,7 +142,7 @@ private:
     unsigned int m_vertex_count;
 };
 
-VertexArrayObject fromMesh(const Mesh& mesh) {
+VertexArrayObject vaoFromMesh(const Mesh &mesh) {
     const unsigned int vertex_count = mesh.vertices.size();
     VertexArrayObject result;
     result.indexBuffer(mesh.indices)
