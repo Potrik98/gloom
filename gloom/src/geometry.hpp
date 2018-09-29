@@ -60,8 +60,8 @@ namespace geometry {
         }
 
         VertexArrayObject vao;
-        vao.indexArray(indices, index_count)
-          ->vertexArray(vertices, vertex_count, 3, 0);
+        vao.indexBuffer(indices, index_count)
+                ->vertexBuffer(vertices, vertex_count, 3, 0);
         return vao;
     }
 
@@ -119,8 +119,8 @@ namespace geometry {
         }
 
         VertexArrayObject vao;
-        vao.indexArray(indices, index_count)
-          ->vertexArray(vertices, vertex_count, 3, 0);
+        vao.indexBuffer(indices, index_count)
+                ->vertexBuffer(vertices, vertex_count, 3, 0);
         return vao;
     }
 }

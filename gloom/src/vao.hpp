@@ -13,8 +13,8 @@
  * 
  * Example usage:
  * VertexArrayObject vao(vertex_count);
- * vao.indexArray(indices, index_count) // binds the indices to the vao
- *   ->vertexArray(vertices, 3, 0); // binds vertices to location 0, with component count 3
+ * vao.indexBuffer(indices, index_count) // binds the indices to the vao
+ *   ->vertexBuffer(vertices, 3, 0); // binds vertices to location 0, with component count 3
  * 
  * vao.render(); // renders the vao.
  */
@@ -29,8 +29,8 @@ public:
      * Binds an index array to the vao.
      * The vao will use this index array when rendering.
      */
-    VertexArrayObject* indexArray(const unsigned int* indices,
-                                  const unsigned int& index_count) {
+    VertexArrayObject* indexBuffer(const unsigned int *indices,
+                                   const unsigned int &index_count) {
         m_index_count = index_count;
         glBindVertexArray(m_id);
 
@@ -47,18 +47,18 @@ public:
      * Binds an index array to the vao.
      * The vao will use this index array when rendering.
      */
-    VertexArrayObject* indexArray(const std::vector<unsigned int>& indices) {
-        return this->indexArray(&indices[0], indices.size());
+    VertexArrayObject* indexBuffer(const std::vector<unsigned int> &indices) {
+        return this->indexBuffer(&indices[0], indices.size());
     }
 
     /*
      * Binds a vertex array to the vao in the given location.
      * Takes in the vertex data, component count and location.
      */
-    VertexArrayObject* vertexArray(const float* vertices,
-                                   const unsigned int& vertex_count,
-                                   const unsigned int& component_count,
-                                   const unsigned int& location) {
+    VertexArrayObject* vertexBuffer(const float *vertices,
+                                    const unsigned int &vertex_count,
+                                    const unsigned int &component_count,
+                                    const unsigned int &location) {
         m_vertex_count = vertex_count;
         
         glBindVertexArray(m_id);
@@ -90,41 +90,41 @@ public:
         return this;
     }
 
-    VertexArrayObject* vertexArray(const float* vertices,
-                                   const unsigned int& component_count,
-                                   const unsigned int& location) {
-        return this->vertexArray(vertices,
-                                 m_vertex_count,
-                                 component_count,
-                                 location);
+    VertexArrayObject* vertexBuffer(const float *vertices,
+                                    const unsigned int &component_count,
+                                    const unsigned int &location) {
+        return this->vertexBuffer(vertices,
+                                  m_vertex_count,
+                                  component_count,
+                                  location);
     }
 
     /*
      * Binds a vertex array to the vao in the given location.
      * Takes in the vertex data, component count and location.
      */
-    VertexArrayObject* vertexArray(const std::vector<float3>& vertices,
-                                   const unsigned int& location) {
+    VertexArrayObject* vertexBuffer(const std::vector<float3> &vertices,
+                                    const unsigned int &location) {
         const unsigned int component_count = 3;
         const unsigned int vertex_count = vertices.size();
-        return this->vertexArray(reinterpret_cast<const float*>(&vertices[0]),
-                                 vertex_count,
-                                 component_count,
-                                 location);
+        return this->vertexBuffer(reinterpret_cast<const float *>(&vertices[0]),
+                                  vertex_count,
+                                  component_count,
+                                  location);
     }
 
     /*
      * Binds a vertex array to the vao in the given location.
      * Takes in the vertex data, component count and location.
      */
-    VertexArrayObject* vertexArray(const std::vector<float4>& vertices,
-                                   const unsigned int& location) {
+    VertexArrayObject* vertexBuffer(const std::vector<float4> &vertices,
+                                    const unsigned int &location) {
         const unsigned int component_count = 4;
         const unsigned int vertex_count = vertices.size();
-        return this->vertexArray(reinterpret_cast<const float*>(&vertices[0]),
-                                 vertex_count,
-                                 component_count,
-                                 location);
+        return this->vertexBuffer(reinterpret_cast<const float *>(&vertices[0]),
+                                  vertex_count,
+                                  component_count,
+                                  location);
     }
 
     /*
@@ -145,11 +145,11 @@ private:
 VertexArrayObject fromMesh(const Mesh& mesh) {
     const unsigned int vertex_count = mesh.vertices.size();
     VertexArrayObject result;
-    result.indexArray(mesh.indices)
-         ->vertexArray(mesh.vertices, 0)
-         ->vertexArray(mesh.colours, 1);
+    result.indexBuffer(mesh.indices)
+            ->vertexBuffer(mesh.vertices, 0)
+            ->vertexBuffer(mesh.colours, 1);
     if (mesh.hasNormals) {
-        result.vertexArray(mesh.normals, 2);
+        result.vertexBuffer(mesh.normals, 2);
     }
     return result;
 }

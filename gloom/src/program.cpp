@@ -4,13 +4,14 @@
 #include "input.hpp"
 #include "ex1.hpp"
 #include "ex2.hpp"
+#include "ex3.hpp"
 
 /*
  * Here you can choose which task to run.
  * Change the type definition to the desired task.
  * Code for the exercises are in the 'ex2.hpp' header
  */
-typedef ex2::Task3 TaskToRun;
+typedef ex3::Task2 TaskToRun;
 
 void runProgram(GLFWwindow* window)
 {

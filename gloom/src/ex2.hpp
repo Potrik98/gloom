@@ -38,7 +38,7 @@ namespace ex2 {
                 0.6f, 1.0f, 0.1f, 1.0f,
                 0.8f, 0.2f, 0.4f, 1.0f
             };
-            m_vao.vertexArray(colors, color_component_count, 1); // Add colors to location 1
+            m_vao.vertexBuffer(colors, color_component_count, 1); // Add colors to location 1
         }
     };
 
@@ -104,9 +104,9 @@ namespace ex2 {
 
                 // Add the vao to the list
                 VertexArrayObject vao;
-                vao.indexArray(indices, index_count)
-                  ->vertexArray(vertices, vertex_count, 3, 0)
-                  ->vertexArray(colors, 4, 1);
+                vao.indexBuffer(indices, index_count)
+                        ->vertexBuffer(vertices, vertex_count, 3, 0)
+                        ->vertexBuffer(colors, 4, 1);
                 
                 m_vaos.push_back(vao);
             }
