@@ -103,9 +103,9 @@ namespace ex2 {
                 }
 
                 // Add the vao to the list
-                VertexArrayObject vao(vertex_count);
+                VertexArrayObject vao;
                 vao.indexArray(indices, index_count)
-                  ->vertexArray(vertices, 3, 0)
+                  ->vertexArray(vertices, vertex_count, 3, 0)
                   ->vertexArray(colors, 4, 1);
                 
                 m_vaos.push_back(vao);

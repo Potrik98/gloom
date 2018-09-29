@@ -20,13 +20,10 @@
  */
 class VertexArrayObject {
 public:
-    VertexArrayObject(const unsigned int& vertex_count) {
-        m_vertex_count = vertex_count;
+    VertexArrayObject() {
         m_index_count = 0;
         glGenVertexArrays(1, &m_id);
     }
-
-    VertexArrayObject() {} // Default constructor required for simpler task initialization
 
     /*
      * Binds an index array to the vao.
@@ -59,8 +56,11 @@ public:
      * Takes in the vertex data, component count and location.
      */
     VertexArrayObject* vertexArray(const float* vertices,
+                                   const unsigned int& vertex_count,
                                    const unsigned int& component_count,
                                    const unsigned int& location) {
+        m_vertex_count = vertex_count;
+        
         glBindVertexArray(m_id);
 
         unsigned int vtx_buf_id;
@@ -69,7 +69,7 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, vtx_buf_id);
         glBufferData(
             GL_ARRAY_BUFFER,
-            m_vertex_count * component_count * sizeof(float),
+            vertex_count * component_count * sizeof(float),
             vertices,
             GL_STATIC_DRAW
         );
@@ -90,6 +90,15 @@ public:
         return this;
     }
 
+    VertexArrayObject* vertexArray(const float* vertices,
+                                   const unsigned int& component_count,
+                                   const unsigned int& location) {
+        return this->vertexArray(vertices,
+                                 m_vertex_count,
+                                 component_count,
+                                 location);
+    }
+
     /*
      * Binds a vertex array to the vao in the given location.
      * Takes in the vertex data, component count and location.
@@ -105,7 +114,10 @@ public:
             vertex_data[index++] = v.y;
             vertex_data[index++] = v.z;
         }
-        return this->vertexArray(vertex_data, component_count, location);
+        return this->vertexArray(vertex_data,
+                                 vertex_count,
+                                 component_count,
+                                 location);
     }
 
     /*
@@ -124,7 +136,10 @@ public:
             vertex_data[index++] = v.z;
             vertex_data[index++] = v.w;
         }
-        return this->vertexArray(vertex_data, component_count, location);
+        return this->vertexArray(vertex_data,
+                                 vertex_count,
+                                 component_count,
+                                 location);
     }
 
     /*
@@ -136,16 +151,15 @@ public:
         glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
     }
 
-    unsigned int getVertexCount() { return m_vertex_count; }
 private:
     GLuint m_id;
-    unsigned int m_vertex_count;
     unsigned int m_index_count;
+    unsigned int m_vertex_count;
 };
 
 VertexArrayObject fromMesh(const Mesh& mesh) {
     const unsigned int vertex_count = mesh.vertices.size();
-    VertexArrayObject result(vertex_count);
+    VertexArrayObject result;
     result.indexArray(mesh.indices)
          ->vertexArray(mesh.vertices, 0)
          ->vertexArray(mesh.colours, 1);

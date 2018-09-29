@@ -59,9 +59,9 @@ namespace geometry {
             indices[3 * i + 2] = 1 + (i + 1) % corners;
         }
 
-        VertexArrayObject vao(vertex_count);
+        VertexArrayObject vao;
         vao.indexArray(indices, index_count)
-          ->vertexArray(vertices, 3, 0);
+          ->vertexArray(vertices, vertex_count, 3, 0);
         return vao;
     }
 
@@ -118,9 +118,9 @@ namespace geometry {
             }
         }
 
-        VertexArrayObject vao(vertex_count);
+        VertexArrayObject vao;
         vao.indexArray(indices, index_count)
-          ->vertexArray(vertices, 3, 0);
+          ->vertexArray(vertices, vertex_count, 3, 0);
         return vao;
     }
 }

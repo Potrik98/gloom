@@ -43,9 +43,8 @@ namespace ex1 {
             for (unsigned int i = 0; i < vertex_count; i++) {
                 indices[i] = i;
             }
-            m_vao = VertexArrayObject(vertex_count);
             m_vao.indexArray(indices, index_count)
-                ->vertexArray(vertices, 3, 0);
+                ->vertexArray(vertices, vertex_count, 3, 0);
         }
     };
 
@@ -63,9 +62,8 @@ namespace ex1 {
             const int vertex_count = 3;
             const int index_count = 3;
 
-            m_vao = VertexArrayObject(vertex_count);
             m_vao.indexArray(indices, index_count)
-                ->vertexArray(vertices, 3, 0);
+                ->vertexArray(vertices, vertex_count, 3, 0);
         }
     };
 
