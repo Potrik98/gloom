@@ -7,6 +7,7 @@
 #include "geometry.hpp"
 #include "camera.hpp"
 #include "handout/OBJLoader.hpp"
+#include "handout/toolbox.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -33,7 +34,7 @@ namespace ex3 {
                     0.87266f, // FOV Y = 50 degrees
                     ((float) windowWidth) / windowHeight, // Aspect ratio
                     1.0f, // Near plane
-                    100.0f // Far plane
+                    500.0f // Far plane
             );
 
             m_camera.set_speed(0.01f);
@@ -69,5 +70,48 @@ namespace ex3 {
         VertexArrayObject m_leg_right;
         glm::mat4 m_projection_matrix;
         Camera m_camera;
+    };
+
+    class Task3 : public Task2 {
+    public:
+        void init() override {
+            Task2::init();
+            float4 color1 = float4(
+                    182/256.0f,
+                    206/256.0f,
+                    167/256.0f,
+                    1.0f);
+            float4 color2 = float4(
+                    195/256.0f,
+                    167/256.0f,
+                    206/255.0f,
+                    1.0f);
+            m_terrain = vaoFromMesh(
+                    generateChessboard(11, 9, 10.0f, color1, color2));
+        }
+
+        void render() override {
+            m_camera.update();
+
+            glm::mat4 transformation =
+                    m_projection_matrix * m_camera.getViewMatrix();
+            m_shader.activate();
+            glUniformMatrix4fv(
+                    m_location_matrix, // location
+                    1, // count: 1 matrix
+                    GL_FALSE, // do not transpose
+                    glm::value_ptr(transformation) // pointer to the matrix data
+            );
+            m_head.render();
+            m_body.render();
+            m_arm_left.render();
+            m_arm_right.render();
+            m_leg_left.render();
+            m_leg_right.render();
+            m_terrain.render();
+        }
+
+    protected:
+        VertexArrayObject m_terrain;
     };
 }
