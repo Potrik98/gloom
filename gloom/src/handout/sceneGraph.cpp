@@ -4,13 +4,24 @@
 // --- Matrix Stack related functions ---
 
 void SceneNode::addChild(SceneNode* child) {
-    ::addChild(this, child);
+    children.push_back(child);
 }
 
-void SceneNode::render() {
+void SceneNode::visit(const glm::mat4 &parent_transformation,
+                      const GLint& matrix_location) {
+    glm::mat4 transformation = parent_transformation * currentTransformationMatrix;
+
+    glUniformMatrix4fv(
+            matrix_location, // location
+            1, // count: 1 matrix
+            GL_FALSE, // do not transpose
+            glm::value_ptr(transformation) // pointer to the matrix data
+    );
+
     vao.render();
+
     for (SceneNode* child : children) {
-        child->render();
+        child->visit(transformation, matrix_location);
     }
 }
 
@@ -55,11 +66,6 @@ SceneNode* createSceneNode() {
 	return new SceneNode();
 }
 
-// Add a child node to its parent's list of children
-void addChild(SceneNode* parent, SceneNode* child) {
-	parent->children.push_back(child);
-}
-
 // Pretty prints the current values of a SceneNode instance to stdout
 void printNode(SceneNode* node) {
 	printf(
@@ -74,4 +80,3 @@ void printNode(SceneNode* node) {
 		node->position.x, node->position.y, node->position.z,
 		node->referencePoint.x, node->referencePoint.y, node->referencePoint.z);
 }
-

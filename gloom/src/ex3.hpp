@@ -86,17 +86,9 @@ namespace ex3 {
             const float delta_time = getTimeDeltaSeconds();
             m_camera.update(delta_time);
 
-            glm::mat4 transformation =
-                    m_projection_matrix * m_camera.getViewMatrix();
+            glm::mat4 transformation = m_projection_matrix * m_camera.getViewMatrix();
             m_shader.activate();
-            glUniformMatrix4fv(
-                    m_location_matrix, // location
-                    1, // count: 1 matrix
-                    GL_FALSE, // do not transpose
-                    glm::value_ptr(transformation) // pointer to the matrix data
-            );
-
-            m_root->render();
+            m_root->visit(transformation, m_location_matrix);
         }
 
     protected:

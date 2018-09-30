@@ -24,6 +24,7 @@ void popMatrix(std::stack<glm::mat4>* stack);
 glm::mat4 peekMatrix(std::stack<glm::mat4>* stack);
 
 void printMatrix(glm::mat4 matrix);
+
 class SceneNode {
 public:
 	SceneNode() {
@@ -49,13 +50,12 @@ public:
 
 	// The ID of the VAO containing the "appearance" of this SceneNode.
 	VertexArrayObject vao;
-	void render();
+	void visit(const glm::mat4& parent_transformation,
+	           const GLint& matrix_location);
 	void addChild(SceneNode* child);
 };
 
-
 SceneNode* createSceneNode();
-void addChild(SceneNode* parent, SceneNode* child);
 void printNode(SceneNode* node);
 
 // For more details, see SceneGraph.cpp.
