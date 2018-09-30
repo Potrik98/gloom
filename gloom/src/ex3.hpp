@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "handout/OBJLoader.hpp"
 #include "handout/toolbox.hpp"
+#include "scenegraph.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -88,6 +89,29 @@ namespace ex3 {
                     1.0f);
             m_terrain = vaoFromMesh(
                     generateChessboard(11, 9, 10.0f, color1, color2));
+
+            // Create root nodes for terrain and person
+            rootNodeCharacter = sceneNodeFactory.createSceneNode("ROOT_CHARACTER");
+            rootNodeTerrain = sceneNodeFactory.createSceneNode("ROOT_TERRAIN");
+
+            // create person
+            scenegraph::SceneNode* bodyNode = sceneNodeFactory.createSceneNode("BODY", m_body);
+            scenegraph::SceneNode* headNode = sceneNodeFactory.createSceneNode("HEAD", m_head);
+            scenegraph::SceneNode* armRightNode = sceneNodeFactory.createSceneNode("RIGHT_ARM", m_arm_right);
+            scenegraph::SceneNode* armLeftNode = sceneNodeFactory.createSceneNode("LEFT_ARM", m_arm_left);
+            scenegraph::SceneNode* legLeftNode = sceneNodeFactory.createSceneNode("LEFT_LEG", m_leg_left);
+            scenegraph::SceneNode* legRightNode = sceneNodeFactory.createSceneNode("RIGHT_LEG", m_leg_right);
+
+            // Add person to root person
+            bodyNode->addChild(headNode);
+            bodyNode->addChild(armRightNode);
+            bodyNode->addChild(armLeftNode);
+            bodyNode->addChild(legLeftNode);
+            bodyNode->addChild(legRightNode);
+            rootNodeCharacter->addChild(bodyNode);
+
+            rootNodeCharacter->printChildren();
+
         }
 
         void render() override {
@@ -113,5 +137,8 @@ namespace ex3 {
 
     protected:
         VertexArrayObject m_terrain;
+        scenegraph::SceneNodeFactory sceneNodeFactory;
+        scenegraph::SceneNode* rootNodeCharacter;
+        scenegraph::SceneNode* rootNodeTerrain;
     };
 }
