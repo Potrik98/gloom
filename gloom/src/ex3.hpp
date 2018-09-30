@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "handout/OBJLoader.hpp"
 #include "handout/toolbox.hpp"
+#include "handout/sceneGraph.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,11 +38,12 @@ namespace ex3 {
                     500.0f // Far plane
             );
 
-            m_camera.set_speed(0.01f);
+            m_camera = Camera(7.0f, 3.0f);
         }
 
         void render() override {
-            m_camera.update();
+            const float delta_time = getTimeDeltaSeconds();
+            m_camera.update(delta_time);
 
             glm::mat4 transformation =
                     m_projection_matrix * m_camera.getViewMatrix();
@@ -61,7 +63,7 @@ namespace ex3 {
         }
     protected:
         Gloom::Shader m_shader;
-        GLuint m_location_matrix;
+        GLint m_location_matrix;
         VertexArrayObject m_head;
         VertexArrayObject m_body;
         VertexArrayObject m_arm_left;
@@ -76,22 +78,13 @@ namespace ex3 {
     public:
         void init() override {
             Task2::init();
-            float4 color1 = float4(
-                    182/256.0f,
-                    206/256.0f,
-                    167/256.0f,
-                    1.0f);
-            float4 color2 = float4(
-                    195/256.0f,
-                    167/256.0f,
-                    206/255.0f,
-                    1.0f);
-            m_terrain = vaoFromMesh(
-                    generateChessboard(11, 9, 10.0f, color1, color2));
+
+            m_root = init_scene_graph();
         }
 
         void render() override {
-            m_camera.update();
+            const float delta_time = getTimeDeltaSeconds();
+            m_camera.update(delta_time);
 
             glm::mat4 transformation =
                     m_projection_matrix * m_camera.getViewMatrix();
@@ -102,16 +95,56 @@ namespace ex3 {
                     GL_FALSE, // do not transpose
                     glm::value_ptr(transformation) // pointer to the matrix data
             );
-            m_head.render();
-            m_body.render();
-            m_arm_left.render();
-            m_arm_right.render();
-            m_leg_left.render();
-            m_leg_right.render();
-            m_terrain.render();
+
+            m_root->render();
         }
 
     protected:
-        VertexArrayObject m_terrain;
+        SceneNode* m_root;
+
+        VertexArrayObject create_terrain() {
+            float4 color1 = float4(
+                    182/256.0f,
+                    206/256.0f,
+                    167/256.0f,
+                    1.0f);
+            float4 color2 = float4(
+                    195/256.0f,
+                    167/256.0f,
+                    206/255.0f,
+                    1.0f);
+            return vaoFromMesh(generateChessboard(11, 9, 10.0f, color1, color2));
+        }
+
+        SceneNode* init_scene_graph() {
+            VertexArrayObject terrain = create_terrain();
+
+            SceneNode* root = createSceneNode();
+            SceneNode* terrain_root = createSceneNode();
+            terrain_root->vao = terrain;
+            root->addChild(terrain_root);
+
+            SceneNode* body = createSceneNode();
+            body->vao = m_body;
+            root->addChild(body);
+
+            SceneNode* arm_left = createSceneNode();
+            arm_left->vao = m_arm_left;
+            body->addChild(arm_left);
+            SceneNode* arm_right = createSceneNode();
+            arm_right->vao = m_arm_right;
+            body->addChild(arm_right);
+            SceneNode* leg_left = createSceneNode();
+            leg_left->vao = m_leg_left;
+            body->addChild(leg_left);
+            SceneNode* leg_right = createSceneNode();
+            leg_right->vao = m_leg_right;
+            body->addChild(leg_right);
+            SceneNode* head = createSceneNode();
+            head->vao = m_head;
+            body->addChild(head);
+
+            return root;
+        }
     };
 }

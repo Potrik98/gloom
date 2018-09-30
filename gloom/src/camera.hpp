@@ -8,6 +8,14 @@
 
 class Camera {
 public:
+    Camera() {};
+
+    Camera(const float& movement_speed,
+           const float& rotation_speed) {
+        m_speed = movement_speed;
+        m_rotation_speed = rotation_speed;
+    }
+
     glm::mat4 getViewMatrix() {
         glm::mat4 res;
         // Apply rotation in the three axises, and translate the camera
@@ -19,19 +27,19 @@ public:
         return res;
     }
 
-    void update() {
+    void update(const float& delta_time) {
         // Check keyboard input and update orientation
-        if (Input::getInstance().getKeyState(GLFW_KEY_A)) m_position.x -= m_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_D)) m_position.x += m_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_W)) m_position.z -= m_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_S)) m_position.z += m_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_C)) m_position.y -= m_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_R)) m_position.y += m_speed;
+        if (Input::getInstance().getKeyState(GLFW_KEY_A)) m_position.x -= m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_D)) m_position.x += m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_W)) m_position.z -= m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_S)) m_position.z += m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_C)) m_position.y -= m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_R)) m_position.y += m_speed * delta_time;
         
-        if (Input::getInstance().getKeyState(GLFW_KEY_LEFT)) m_rotation.y -= m_rotation_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_RIGHT)) m_rotation.y += m_rotation_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_UP)) m_rotation.x += m_rotation_speed;
-        if (Input::getInstance().getKeyState(GLFW_KEY_DOWN)) m_rotation.x -= m_rotation_speed;
+        if (Input::getInstance().getKeyState(GLFW_KEY_LEFT)) m_rotation.y -= m_rotation_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_RIGHT)) m_rotation.y += m_rotation_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_UP)) m_rotation.x += m_rotation_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_DOWN)) m_rotation.x -= m_rotation_speed * delta_time;
     }
 
     void set_speed(const float& speed) {

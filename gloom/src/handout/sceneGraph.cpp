@@ -3,6 +3,17 @@
 
 // --- Matrix Stack related functions ---
 
+void SceneNode::addChild(SceneNode* child) {
+    ::addChild(this, child);
+}
+
+void SceneNode::render() {
+    vao.render();
+    for (SceneNode* child : children) {
+        child->render();
+    }
+}
+
 // You can use these to create a more "realistic" scene graph implementation 
 
 // Allocate a new empty matrix stack on the heap
@@ -57,12 +68,10 @@ void printNode(SceneNode* node) {
 		"    Rotation: (%f, %f, %f)\n"
 		"    Location: (%f, %f, %f)\n"
 		"    Reference point: (%f, %f, %f)\n"
-		"    VAO ID: %i\n"
 		"}\n",
 		int(node->children.size()),
 		node->rotation.x, node->rotation.y, node->rotation.z,
 		node->position.x, node->position.y, node->position.z,
-		node->referencePoint.x, node->referencePoint.y, node->referencePoint.z, 
-		node->vertexArrayObjectID);
+		node->referencePoint.x, node->referencePoint.y, node->referencePoint.z);
 }
 
