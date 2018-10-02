@@ -2,6 +2,7 @@
 #include <chrono>
 #include <fstream>
 #include "toolbox.hpp"
+#include <glm/glm.hpp>
 
 Mesh generateChessboard(
         unsigned int width,  // Width and height of the chessboard, measured in tiles
@@ -143,13 +144,13 @@ Path::Path(std::string const &coordinatesFile) {
     waypoints = readCoordinatesFile(coordinatesFile);
 }
 
-float2 Path::getCurrentWaypoint(float tileWidth) {
+glm::vec2 Path::getCurrentWaypoint(float tileWidth) {
     int2 intWaypoint = waypoints.at(currentWaypoint);
-    return float2(intWaypoint.x, intWaypoint.y) * tileWidth;
+    return glm::vec2(intWaypoint.x, intWaypoint.y) * tileWidth;
 }
 
-bool Path::hasWaypointBeenReached(float2 characterPosition, float tileWidth) {
-    float2 currentWaypoint = getCurrentWaypoint(tileWidth);
+bool Path::hasWaypointBeenReached(glm::vec2 characterPosition, float tileWidth) {
+    glm::vec2 currentWaypoint = getCurrentWaypoint(tileWidth);
 
     float dx = currentWaypoint.x - characterPosition.x;
     float dy = currentWaypoint.y - characterPosition.y;

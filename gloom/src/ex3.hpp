@@ -91,12 +91,14 @@ namespace ex3 {
             m_root->visit(transformation, m_location_matrix);
 
             time += delta_time;
-            float rotation_speed = 1.9f;
-            float rotation_range = 0.8;
+            const float rotation_speed = 1.9f;
+            const float rotation_range = 0.8;
             arm_left_node->rotation.x = rotation_range * sinf(rotation_speed * time);
             arm_right_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
             leg_left_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
             leg_right_node->rotation.x = rotation_range * sinf(rotation_speed * time);
+
+            move_path(delta_time);
         }
 
     protected:
@@ -105,7 +107,23 @@ namespace ex3 {
         SceneNode* arm_right_node;
         SceneNode* leg_left_node;
         SceneNode* leg_right_node;
+        SceneNode* body;
+        Path m_path = Path("../gloom/pathFiles/coordinates_0.txt");
         float time = 0.0f;
+        const float tile_size = 10.0f;
+
+        void move_path(const float& delta_time) {
+            glm::vec2 target = m_path.getCurrentWaypoint(tile_size);
+            glm::vec2 d = glm::normalize(target - glm::vec2(body->position.x, body->position.z));
+            const float movement_speed = 4.0f;
+            glm::vec2 move = delta_time * movement_speed * d;
+            body->position.x += move.x;
+            body->position.z += move.y;
+
+            if (m_path.hasWaypointBeenReached(glm::vec2(body->position.x, body->position.z), tile_size)) {
+                m_path.advanceToNextWaypoint();
+            }
+        }
 
         VertexArrayObject create_terrain() {
             float4 color1 = float4(
@@ -118,7 +136,7 @@ namespace ex3 {
                     167/256.0f,
                     206/255.0f,
                     1.0f);
-            return vaoFromMesh(generateChessboard(11, 9, 10.0f, color1, color2));
+            return vaoFromMesh(generateChessboard(11, 9, tile_size, color1, color2));
         }
 
         SceneNode* init_scene_graph() {
@@ -129,7 +147,7 @@ namespace ex3 {
             terrain_root->vao = terrain;
             root->addChild(terrain_root);
 
-            SceneNode* body = createSceneNode();
+            body = createSceneNode();
             body->vao = m_body;
             body->referencePoint = glm::vec3(0, 0, 0);
             root->addChild(body);

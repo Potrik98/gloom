@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include <glm/glm.hpp>
 #include "mesh.hpp"
 
 // Generates a mesh containing a 3D object which looks like a chessboard.
@@ -31,10 +32,10 @@ public:
 
     // Returns the coordinates of the current waypoint, scaled to the coordinate space
     // of the terrain.
-    float2 getCurrentWaypoint(float tileWidth);
+    glm::vec2 getCurrentWaypoint(float tileWidth);
 
     // Determines whether the character is close enough to move on to the next waypoint
-    bool hasWaypointBeenReached(float2 characterPosition, float tileWidth);
+    bool hasWaypointBeenReached(glm::vec2 characterPosition, float tileWidth);
 
     // Advances the current waypoint to the next one on the path.
     // If the end has been reached, it resets to the first waypoint.
