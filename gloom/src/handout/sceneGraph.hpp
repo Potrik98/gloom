@@ -28,10 +28,10 @@ void printMatrix(glm::mat4 matrix);
 class SceneNode {
 public:
 	SceneNode() {
-		position = float3(0, 0, 0);
-		rotation = float3(0, 0, 0);
+		position = glm::vec3(0, 0, 0);
+		rotation = glm::vec3(0, 0, 0);
 
-        referencePoint = float3(0, 0, 0);
+        referencePoint = glm::vec3(0, 0, 0);
 	}
 
 	// A list of all children that belong to this node.
@@ -39,14 +39,14 @@ public:
 	std::vector<SceneNode*> children;
 
 	// The node's position and rotation relative to its parent
-	float3 position;
-	float3 rotation;
+	glm::vec3 position;
+	glm::vec3 rotation;
 
 	// A transformation matrix representing the transformation of the node's location relative to its parent. This matrix is updated every frame.
 	glm::mat4 currentTransformationMatrix;
 
 	// The location of the node's reference point
-	float3 referencePoint;
+	glm::vec3 referencePoint;
 
 	// The ID of the VAO containing the "appearance" of this SceneNode.
 	VertexArrayObject vao;

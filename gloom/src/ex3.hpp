@@ -89,10 +89,15 @@ namespace ex3 {
             glm::mat4 transformation = m_projection_matrix * m_camera.getViewMatrix();
             m_shader.activate();
             m_root->visit(transformation, m_location_matrix);
+
+            t += delta_time;
+            rotate_me->rotation.y = 1.0f * sinf(t);
         }
 
     protected:
         SceneNode* m_root;
+        SceneNode* rotate_me;
+        float t = 0.0f;
 
         VertexArrayObject create_terrain() {
             float4 color1 = float4(
@@ -118,23 +123,36 @@ namespace ex3 {
 
             SceneNode* body = createSceneNode();
             body->vao = m_body;
+            body->referencePoint = glm::vec3(0, 0, 0);
             root->addChild(body);
 
             SceneNode* arm_left = createSceneNode();
             arm_left->vao = m_arm_left;
+            arm_left->referencePoint = glm::vec3(-6, 22, 0);
             body->addChild(arm_left);
+
             SceneNode* arm_right = createSceneNode();
             arm_right->vao = m_arm_right;
+            arm_right->referencePoint = glm::vec3(6, 22, 0);
             body->addChild(arm_right);
+
             SceneNode* leg_left = createSceneNode();
             leg_left->vao = m_leg_left;
+            leg_left->referencePoint = glm::vec3(6, 12, 0);
+
             body->addChild(leg_left);
+
             SceneNode* leg_right = createSceneNode();
             leg_right->vao = m_leg_right;
+            leg_right->referencePoint = glm::vec3(2, 12, 0);
             body->addChild(leg_right);
+
             SceneNode* head = createSceneNode();
             head->vao = m_head;
+            head->referencePoint = glm::vec3(0, 24, 0);
             body->addChild(head);
+
+            rotate_me = body;
 
             return root;
         }

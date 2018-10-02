@@ -9,6 +9,13 @@ void SceneNode::addChild(SceneNode* child) {
 
 void SceneNode::visit(const glm::mat4 &parent_transformation,
                       const GLint& matrix_location) {
+    currentTransformationMatrix = glm::translate(position)
+            * glm::translate(referencePoint)
+            * glm::rotate(rotation.z, glm::vec3(0,0,1))
+            * glm::rotate(rotation.y, glm::vec3(0,1,0))
+            * glm::rotate(rotation.x, glm::vec3(1,0,0))
+            * glm::translate(-referencePoint);
+
     glm::mat4 transformation = parent_transformation * currentTransformationMatrix;
 
     glUniformMatrix4fv(
