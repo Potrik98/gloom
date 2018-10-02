@@ -90,14 +90,22 @@ namespace ex3 {
             m_shader.activate();
             m_root->visit(transformation, m_location_matrix);
 
-            t += delta_time;
-            rotate_me->rotation.y = 1.0f * sinf(t);
+            time += delta_time;
+            float rotation_speed = 1.9f;
+            float rotation_range = 0.8;
+            arm_left_node->rotation.x = rotation_range * sinf(rotation_speed * time);
+            arm_right_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
+            leg_left_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
+            leg_right_node->rotation.x = rotation_range * sinf(rotation_speed * time);
         }
 
     protected:
         SceneNode* m_root;
-        SceneNode* rotate_me;
-        float t = 0.0f;
+        SceneNode* arm_left_node;
+        SceneNode* arm_right_node;
+        SceneNode* leg_left_node;
+        SceneNode* leg_right_node;
+        float time = 0.0f;
 
         VertexArrayObject create_terrain() {
             float4 color1 = float4(
@@ -126,33 +134,31 @@ namespace ex3 {
             body->referencePoint = glm::vec3(0, 0, 0);
             root->addChild(body);
 
-            SceneNode* arm_left = createSceneNode();
-            arm_left->vao = m_arm_left;
-            arm_left->referencePoint = glm::vec3(-6, 22, 0);
-            body->addChild(arm_left);
+            arm_left_node = createSceneNode();
+            arm_left_node->vao = m_arm_left;
+            arm_left_node->referencePoint = glm::vec3(-6, 22, 0);
+            body->addChild(arm_left_node);
 
-            SceneNode* arm_right = createSceneNode();
-            arm_right->vao = m_arm_right;
-            arm_right->referencePoint = glm::vec3(6, 22, 0);
-            body->addChild(arm_right);
+            arm_right_node = createSceneNode();
+            arm_right_node->vao = m_arm_right;
+            arm_right_node->referencePoint = glm::vec3(6, 22, 0);
+            body->addChild(arm_right_node);
 
-            SceneNode* leg_left = createSceneNode();
-            leg_left->vao = m_leg_left;
-            leg_left->referencePoint = glm::vec3(6, 12, 0);
+            leg_left_node = createSceneNode();
+            leg_left_node->vao = m_leg_left;
+            leg_left_node->referencePoint = glm::vec3(6, 12, 0);
 
-            body->addChild(leg_left);
+            body->addChild(leg_left_node);
 
-            SceneNode* leg_right = createSceneNode();
-            leg_right->vao = m_leg_right;
-            leg_right->referencePoint = glm::vec3(2, 12, 0);
-            body->addChild(leg_right);
+            leg_right_node = createSceneNode();
+            leg_right_node->vao = m_leg_right;
+            leg_right_node->referencePoint = glm::vec3(2, 12, 0);
+            body->addChild(leg_right_node);
 
             SceneNode* head = createSceneNode();
             head->vao = m_head;
             head->referencePoint = glm::vec3(0, 24, 0);
             body->addChild(head);
-
-            rotate_me = body;
 
             return root;
         }
