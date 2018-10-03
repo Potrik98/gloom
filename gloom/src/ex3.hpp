@@ -80,6 +80,10 @@ namespace ex3 {
             Task2::init();
 
             m_root = init_scene_graph();
+
+            // Set the camera orientation to something useful
+            m_camera.set_position(glm::vec3(110.0f, 30.0f, 110.0f));
+            m_camera.set_rotation(glm::vec3(-0.3f, 0.8f, 0.0f));
         }
 
         void render() override {
@@ -123,6 +127,8 @@ namespace ex3 {
             if (m_path.hasWaypointBeenReached(glm::vec2(body->position.x, body->position.z), tile_size)) {
                 m_path.advanceToNextWaypoint();
             }
+
+            body->rotation.y = atan2(d.x, d.y);
         }
 
         VertexArrayObject create_terrain() {
@@ -136,7 +142,7 @@ namespace ex3 {
                     167/256.0f,
                     206/255.0f,
                     1.0f);
-            return vaoFromMesh(generateChessboard(11, 9, tile_size, color1, color2));
+            return vaoFromMesh(generateChessboard(9, 9, tile_size, color1, color2));
         }
 
         SceneNode* init_scene_graph() {

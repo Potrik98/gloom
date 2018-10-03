@@ -36,14 +36,22 @@ public:
         if (Input::getInstance().getKeyState(GLFW_KEY_C)) m_position.y -= m_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_R)) m_position.y += m_speed * delta_time;
         
-        if (Input::getInstance().getKeyState(GLFW_KEY_LEFT)) m_rotation.y -= m_rotation_speed * delta_time;
-        if (Input::getInstance().getKeyState(GLFW_KEY_RIGHT)) m_rotation.y += m_rotation_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_LEFT)) m_rotation.y += m_rotation_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_RIGHT)) m_rotation.y -= m_rotation_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_UP)) m_rotation.x += m_rotation_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_DOWN)) m_rotation.x -= m_rotation_speed * delta_time;
     }
 
     void set_speed(const float& speed) {
         m_speed = speed;
+    }
+
+    void set_position(const glm::vec3& pos) {
+        m_position = pos; // will copy the data
+    }
+
+    void set_rotation(const glm::vec3& rot) {
+        m_rotation = rot;
     }
 private:
     glm::vec3 m_position = glm::vec3(0, 0, 2);
