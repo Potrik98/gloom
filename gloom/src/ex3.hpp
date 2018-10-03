@@ -90,9 +90,15 @@ namespace ex3 {
             const float delta_time = getTimeDeltaSeconds();
             m_camera.update(delta_time);
 
-            glm::mat4 transformation = m_projection_matrix * m_camera.getViewMatrix();
+            glm::mat4 vp_matrix = m_projection_matrix * m_camera.getViewMatrix();
             m_shader.activate();
-            m_root->visit(transformation, m_location_matrix);
+
+            // Calling visit on the root with the parent.
+            // mvp_matrix = vp_matrix, because the model matrix
+            // of the root is the identity matrix.
+            // This will recursively calculate the mvp matrix
+            // of all children
+            m_root->visit(vp_matrix, m_location_matrix);
 
             animate(delta_time);
             move_path(delta_time);

@@ -51,8 +51,15 @@ public:
 
 	// The ID of the VAO containing the "appearance" of this SceneNode.
 	VertexArrayObject vao;
-	void visit(const glm::mat4& parent_transformation,
-	           const GLint& matrix_location);
+
+	/**
+	 * Visit (update and render) the scene node,
+	 * and all children nodes
+	 * @param parent_mvp_matrix The mvp matrix of the parent scene node
+	 * @param mvp_matrix_location The shader uniform location of the mvp matrix
+	 */
+	void visit(const glm::mat4& parent_mvp_matrix,
+	           const GLint& mvp_matrix_location);
 
 	/**
 	 * Add a SceneNode to the children of this node.

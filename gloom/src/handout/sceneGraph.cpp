@@ -9,8 +9,8 @@ void SceneNode::addChild(std::shared_ptr<SceneNode> child) {
     children.push_back(child);
 }
 
-void SceneNode::visit(const glm::mat4 &parent_transformation,
-                      const GLint& matrix_location) {
+void SceneNode::visit(const glm::mat4 &parent_mvp_matrix,
+                      const GLint& mvp_matrix_location) {
     currentTransformationMatrix = glm::translate(position)
             * glm::translate(referencePoint)
             * glm::rotate(rotation.z, glm::vec3(0,0,1))
@@ -18,19 +18,32 @@ void SceneNode::visit(const glm::mat4 &parent_transformation,
             * glm::rotate(rotation.x, glm::vec3(1,0,0))
             * glm::translate(-referencePoint);
 
-    glm::mat4 mvp_matrix = parent_transformation * currentTransformationMatrix;
+    // We skip calculating the model matrix of this node,
+    // because we can move straight to the mvp matrix by
+    // applying the current node transformation.
+    // We could alternatively make the visit function take in
+    // the vp matrix as an argument, i.e.
+    // visit(parent_model_matrix, vp_matrix, mvp_matrix_location)
+    // and then the current model matrix would be
+    // ml_matrix = parent_ml_matrix * currentTransformationMatrix
+    // and the mvp matrix would be
+    // mvp_matrix = vp_matrix * ml_matrix
+    // but this approach seems inelegant, and is also
+    // more computationally expensive, requiring two matrix
+    // multiplications per visited node instead of one.
+    glm::mat4 mvp_matrix = parent_mvp_matrix * currentTransformationMatrix;
 
     glUniformMatrix4fv(
-            matrix_location, // location
+            mvp_matrix_location, // location
             1, // count: 1 matrix
             GL_FALSE, // do not transpose
             glm::value_ptr(mvp_matrix) // pointer to the matrix data
     );
 
-    vao.render(); // only renders valid a valid vao
+    vao.render(); // only renders valid vaos
 
-    for (std::shared_ptr<SceneNode> child : children) {
-        child->visit(mvp_matrix, matrix_location);
+    for (const std::shared_ptr<SceneNode> &child : children) {
+        child->visit(mvp_matrix, mvp_matrix_location);
     }
 }
 
