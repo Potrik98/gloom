@@ -37,7 +37,7 @@ public:
 
 	// A list of all children that belong to this node.
 	// For instance, in case of the scene graph of a human body shown in the assignment text, the "Upper Torso" node would contain the "Left Arm", "Right Arm", "Head" and "Lower Torso" nodes in its list of children.
-	std::vector<SceneNode*> children;
+	std::vector<std::shared_ptr<SceneNode>> children;
 
 	// The node's position and rotation relative to its parent
 	glm::vec3 position;
@@ -53,10 +53,18 @@ public:
 	VertexArrayObject vao;
 	void visit(const glm::mat4& parent_transformation,
 	           const GLint& matrix_location);
-	void addChild(SceneNode* child);
+
+	/**
+	 * Add a SceneNode to the children of this node.
+	 *
+	 * When adding a child, make a copy of the shared_ptr,
+	 * so that the object still exists, even if the original
+	 * shared_ptr is destroyed.
+	 */
+	void addChild(std::shared_ptr<SceneNode> child);
 };
 
 std::shared_ptr<SceneNode> createSceneNode();
-void printNode(SceneNode* node);
+void printNode(const std::shared_ptr<SceneNode>& node);
 
 // For more details, see SceneGraph.cpp.

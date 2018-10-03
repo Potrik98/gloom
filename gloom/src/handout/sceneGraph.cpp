@@ -5,7 +5,7 @@
 
 // --- Matrix Stack related functions ---
 
-void SceneNode::addChild(SceneNode* child) {
+void SceneNode::addChild(std::shared_ptr<SceneNode> child) {
     children.push_back(child);
 }
 
@@ -29,7 +29,7 @@ void SceneNode::visit(const glm::mat4 &parent_transformation,
 
     vao.render(); // only renders valid a valid vao
 
-    for (SceneNode* child : children) {
+    for (std::shared_ptr<SceneNode> child : children) {
         child->visit(mvp_matrix, matrix_location);
     }
 }
@@ -76,7 +76,7 @@ std::shared_ptr<SceneNode> createSceneNode() {
 }
 
 // Pretty prints the current values of a SceneNode instance to stdout
-void printNode(SceneNode* node) {
+void printNode(const std::shared_ptr<SceneNode>& node) {
 	printf(
 		"SceneNode {\n"
 		"    Child count: %i\n"

@@ -74,7 +74,7 @@ namespace ex3 {
         Camera m_camera;
     };
 
-    class Task3 : public Task2 {
+    class Task345 : public Task2 {
     public:
         void init() override {
             Task2::init();
@@ -94,14 +94,7 @@ namespace ex3 {
             m_shader.activate();
             m_root->visit(transformation, m_location_matrix);
 
-            m_time += delta_time;
-            const float rotation_speed = 1.9f;
-            const float rotation_range = 0.8;
-            m_node_arm_left->rotation.x = rotation_range * sinf(rotation_speed * m_time);
-            m_node_arm_right->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
-            m_node_leg_left->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
-            m_node_leg_right->rotation.x = rotation_range * sinf(rotation_speed * m_time);
-
+            animate(delta_time);
             move_path(delta_time);
         }
 
@@ -117,6 +110,16 @@ namespace ex3 {
         float m_time = 0.0f;
         const float TILE_SIZE = 10.0f;
 
+        void animate(const float& delta_time) {
+            m_time += delta_time;
+            const float rotation_speed = 1.9f;
+            const float rotation_range = 0.8;
+            m_node_arm_left->rotation.x = rotation_range * sinf(rotation_speed * m_time);
+            m_node_arm_right->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
+            m_node_leg_left->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
+            m_node_leg_right->rotation.x = rotation_range * sinf(rotation_speed * m_time);
+        }
+
         void move_path(const float& delta_time) {
             glm::vec2 target = m_path.getCurrentWaypoint(TILE_SIZE);
             glm::vec2 d = glm::normalize(target - glm::vec2(m_node_body->position.x, m_node_body->position.z));
@@ -129,6 +132,7 @@ namespace ex3 {
                 m_path.advanceToNextWaypoint();
             }
 
+            // Set body rotation to face the way we're moving
             m_node_body->rotation.y = atan2(d.x, d.y);
         }
 
@@ -152,38 +156,38 @@ namespace ex3 {
             std::shared_ptr<SceneNode> root = createSceneNode();
             std::shared_ptr<SceneNode> terrain_root = createSceneNode();
             terrain_root->vao = terrain;
-            root->addChild(terrain_root.get());
+            root->addChild(terrain_root);
 
             m_node_body = createSceneNode();
             m_node_body->vao = m_body;
             m_node_body->referencePoint = glm::vec3(0, 0, 0);
-            root->addChild(m_node_body.get());
+            root->addChild(m_node_body);
 
             m_node_arm_left = createSceneNode();
             m_node_arm_left->vao = m_arm_left;
             m_node_arm_left->referencePoint = glm::vec3(-6, 22, 0);
-            m_node_body->addChild(m_node_arm_left.get());
+            m_node_body->addChild(m_node_arm_left);
 
             m_node_arm_right = createSceneNode();
             m_node_arm_right->vao = m_arm_right;
             m_node_arm_right->referencePoint = glm::vec3(6, 22, 0);
-            m_node_body->addChild(m_node_arm_right.get());
+            m_node_body->addChild(m_node_arm_right);
 
             m_node_leg_left = createSceneNode();
             m_node_leg_left->vao = m_leg_left;
             m_node_leg_left->referencePoint = glm::vec3(6, 12, 0);
 
-            m_node_body->addChild(m_node_leg_left.get());
+            m_node_body->addChild(m_node_leg_left);
 
             m_node_leg_right = createSceneNode();
             m_node_leg_right->vao = m_leg_right;
             m_node_leg_right->referencePoint = glm::vec3(2, 12, 0);
-            m_node_body->addChild(m_node_leg_right.get());
+            m_node_body->addChild(m_node_leg_right);
 
             std::shared_ptr<SceneNode> head = createSceneNode();
             head->vao = m_head;
             head->referencePoint = glm::vec3(0, 24, 0);
-            m_node_body->addChild(head.get());
+            m_node_body->addChild(head);
 
             return root;
         }
