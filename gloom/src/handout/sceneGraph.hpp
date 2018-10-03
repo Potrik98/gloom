@@ -13,6 +13,7 @@
 #include <ctime> 
 #include <chrono>
 #include <fstream>
+#include <memory>
 #include "floats.hpp"
 
 #include "vao.hpp"
@@ -55,7 +56,7 @@ public:
 	void addChild(SceneNode* child);
 };
 
-SceneNode* createSceneNode();
+std::shared_ptr<SceneNode> createSceneNode();
 void printNode(SceneNode* node);
 
 // For more details, see SceneGraph.cpp.

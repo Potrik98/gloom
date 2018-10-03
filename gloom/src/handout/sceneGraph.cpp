@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "sceneGraph.hpp"
 #include <iostream>
 
@@ -16,23 +18,23 @@ void SceneNode::visit(const glm::mat4 &parent_transformation,
             * glm::rotate(rotation.x, glm::vec3(1,0,0))
             * glm::translate(-referencePoint);
 
-    glm::mat4 transformation = parent_transformation * currentTransformationMatrix;
+    glm::mat4 mvp_matrix = parent_transformation * currentTransformationMatrix;
 
     glUniformMatrix4fv(
             matrix_location, // location
             1, // count: 1 matrix
             GL_FALSE, // do not transpose
-            glm::value_ptr(transformation) // pointer to the matrix data
+            glm::value_ptr(mvp_matrix) // pointer to the matrix data
     );
 
-    vao.render();
+    vao.render(); // only renders valid a valid vao
 
     for (SceneNode* child : children) {
-        child->visit(transformation, matrix_location);
+        child->visit(mvp_matrix, matrix_location);
     }
 }
 
-// You can use these to create a more "realistic" scene graph implementation 
+// You can use these to create a more "realistic" scene graph implementation
 
 // Allocate a new empty matrix stack on the heap
 std::stack<glm::mat4>* createEmptyMatrixStack() {
@@ -69,8 +71,8 @@ void printMatrix(glm::mat4 matrix) {
 
 // Creates an empty SceneNode instance.
 // Values are initialised because otherwise they may contain garbage memory.
-SceneNode* createSceneNode() {
-	return new SceneNode();
+std::shared_ptr<SceneNode> createSceneNode() {
+	return std::make_shared<SceneNode>();
 }
 
 // Pretty prints the current values of a SceneNode instance to stdout

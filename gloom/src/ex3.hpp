@@ -94,41 +94,42 @@ namespace ex3 {
             m_shader.activate();
             m_root->visit(transformation, m_location_matrix);
 
-            time += delta_time;
+            m_time += delta_time;
             const float rotation_speed = 1.9f;
             const float rotation_range = 0.8;
-            arm_left_node->rotation.x = rotation_range * sinf(rotation_speed * time);
-            arm_right_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
-            leg_left_node->rotation.x = -rotation_range * sinf(rotation_speed * time);
-            leg_right_node->rotation.x = rotation_range * sinf(rotation_speed * time);
+            m_node_arm_left->rotation.x = rotation_range * sinf(rotation_speed * m_time);
+            m_node_arm_right->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
+            m_node_leg_left->rotation.x = -rotation_range * sinf(rotation_speed * m_time);
+            m_node_leg_right->rotation.x = rotation_range * sinf(rotation_speed * m_time);
 
             move_path(delta_time);
         }
 
     protected:
-        SceneNode* m_root;
-        SceneNode* arm_left_node;
-        SceneNode* arm_right_node;
-        SceneNode* leg_left_node;
-        SceneNode* leg_right_node;
-        SceneNode* body;
+        std::shared_ptr<SceneNode> m_root;
+        std::shared_ptr<SceneNode> m_node_arm_left;
+        std::shared_ptr<SceneNode> m_node_arm_right;
+        std::shared_ptr<SceneNode> m_node_leg_left;
+        std::shared_ptr<SceneNode> m_node_leg_right;
+        std::shared_ptr<SceneNode> m_node_body;
         Path m_path = Path("../gloom/pathFiles/coordinates_0.txt");
-        float time = 0.0f;
-        const float tile_size = 10.0f;
+
+        float m_time = 0.0f;
+        const float TILE_SIZE = 10.0f;
 
         void move_path(const float& delta_time) {
-            glm::vec2 target = m_path.getCurrentWaypoint(tile_size);
-            glm::vec2 d = glm::normalize(target - glm::vec2(body->position.x, body->position.z));
+            glm::vec2 target = m_path.getCurrentWaypoint(TILE_SIZE);
+            glm::vec2 d = glm::normalize(target - glm::vec2(m_node_body->position.x, m_node_body->position.z));
             const float movement_speed = 4.0f;
             glm::vec2 move = delta_time * movement_speed * d;
-            body->position.x += move.x;
-            body->position.z += move.y;
+            m_node_body->position.x += move.x;
+            m_node_body->position.z += move.y;
 
-            if (m_path.hasWaypointBeenReached(glm::vec2(body->position.x, body->position.z), tile_size)) {
+            if (m_path.hasWaypointBeenReached(glm::vec2(m_node_body->position.x, m_node_body->position.z), TILE_SIZE)) {
                 m_path.advanceToNextWaypoint();
             }
 
-            body->rotation.y = atan2(d.x, d.y);
+            m_node_body->rotation.y = atan2(d.x, d.y);
         }
 
         VertexArrayObject create_terrain() {
@@ -142,47 +143,47 @@ namespace ex3 {
                     167/256.0f,
                     206/255.0f,
                     1.0f);
-            return vaoFromMesh(generateChessboard(9, 9, tile_size, color1, color2));
+            return vaoFromMesh(generateChessboard(9, 9, TILE_SIZE, color1, color2));
         }
 
-        SceneNode* init_scene_graph() {
+        std::shared_ptr<SceneNode> init_scene_graph() {
             VertexArrayObject terrain = create_terrain();
 
-            SceneNode* root = createSceneNode();
-            SceneNode* terrain_root = createSceneNode();
+            std::shared_ptr<SceneNode> root = createSceneNode();
+            std::shared_ptr<SceneNode> terrain_root = createSceneNode();
             terrain_root->vao = terrain;
-            root->addChild(terrain_root);
+            root->addChild(terrain_root.get());
 
-            body = createSceneNode();
-            body->vao = m_body;
-            body->referencePoint = glm::vec3(0, 0, 0);
-            root->addChild(body);
+            m_node_body = createSceneNode();
+            m_node_body->vao = m_body;
+            m_node_body->referencePoint = glm::vec3(0, 0, 0);
+            root->addChild(m_node_body.get());
 
-            arm_left_node = createSceneNode();
-            arm_left_node->vao = m_arm_left;
-            arm_left_node->referencePoint = glm::vec3(-6, 22, 0);
-            body->addChild(arm_left_node);
+            m_node_arm_left = createSceneNode();
+            m_node_arm_left->vao = m_arm_left;
+            m_node_arm_left->referencePoint = glm::vec3(-6, 22, 0);
+            m_node_body->addChild(m_node_arm_left.get());
 
-            arm_right_node = createSceneNode();
-            arm_right_node->vao = m_arm_right;
-            arm_right_node->referencePoint = glm::vec3(6, 22, 0);
-            body->addChild(arm_right_node);
+            m_node_arm_right = createSceneNode();
+            m_node_arm_right->vao = m_arm_right;
+            m_node_arm_right->referencePoint = glm::vec3(6, 22, 0);
+            m_node_body->addChild(m_node_arm_right.get());
 
-            leg_left_node = createSceneNode();
-            leg_left_node->vao = m_leg_left;
-            leg_left_node->referencePoint = glm::vec3(6, 12, 0);
+            m_node_leg_left = createSceneNode();
+            m_node_leg_left->vao = m_leg_left;
+            m_node_leg_left->referencePoint = glm::vec3(6, 12, 0);
 
-            body->addChild(leg_left_node);
+            m_node_body->addChild(m_node_leg_left.get());
 
-            leg_right_node = createSceneNode();
-            leg_right_node->vao = m_leg_right;
-            leg_right_node->referencePoint = glm::vec3(2, 12, 0);
-            body->addChild(leg_right_node);
+            m_node_leg_right = createSceneNode();
+            m_node_leg_right->vao = m_leg_right;
+            m_node_leg_right->referencePoint = glm::vec3(2, 12, 0);
+            m_node_body->addChild(m_node_leg_right.get());
 
-            SceneNode* head = createSceneNode();
+            std::shared_ptr<SceneNode> head = createSceneNode();
             head->vao = m_head;
             head->referencePoint = glm::vec3(0, 24, 0);
-            body->addChild(head);
+            m_node_body->addChild(head.get());
 
             return root;
         }
