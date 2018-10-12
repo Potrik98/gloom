@@ -29,13 +29,17 @@ public:
 
     void update(const float& delta_time) {
         // Check keyboard input and update orientation
-        if (Input::getInstance().getKeyState(GLFW_KEY_A)) m_position.x -= m_speed * delta_time;
-        if (Input::getInstance().getKeyState(GLFW_KEY_D)) m_position.x += m_speed * delta_time;
-        if (Input::getInstance().getKeyState(GLFW_KEY_W)) m_position.z -= m_speed * delta_time;
-        if (Input::getInstance().getKeyState(GLFW_KEY_S)) m_position.z += m_speed * delta_time;
+        float x_dir = 0.0f;
+        float z_dir = 0.0f;
+        if (Input::getInstance().getKeyState(GLFW_KEY_A)) x_dir -= m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_D)) x_dir += m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_W)) z_dir -= m_speed * delta_time;
+        if (Input::getInstance().getKeyState(GLFW_KEY_S)) z_dir += m_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_C)) m_position.y -= m_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_R)) m_position.y += m_speed * delta_time;
-        
+        m_position.x += cosf(-m_rotation.y) * x_dir - sinf(-m_rotation.y) * z_dir;
+        m_position.z += sinf(-m_rotation.y) * x_dir + cosf(-m_rotation.y) * z_dir;
+
         if (Input::getInstance().getKeyState(GLFW_KEY_LEFT)) m_rotation.y += m_rotation_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_RIGHT)) m_rotation.y -= m_rotation_speed * delta_time;
         if (Input::getInstance().getKeyState(GLFW_KEY_UP)) m_rotation.x += m_rotation_speed * delta_time;

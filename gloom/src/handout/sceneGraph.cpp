@@ -40,7 +40,7 @@ void SceneNode::visit(const glm::mat4 &parent_mvp_matrix,
             glm::value_ptr(mvp_matrix) // pointer to the matrix data
     );
 
-    vao.render(); // only renders valid vaos
+    vao.render(); // only renders valid vaos (because vaoID = 0 doesn't render)
 
     for (const std::shared_ptr<SceneNode> &child : children) {
         child->visit(mvp_matrix, mvp_matrix_location);

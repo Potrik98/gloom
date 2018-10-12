@@ -98,6 +98,7 @@ namespace ex3 {
             // of the root is the identity matrix.
             // This will recursively calculate the mvp matrix
             // of all children
+            // Implementation of the visit method is in sceneGraph.cpp
             m_root->visit(vp_matrix, m_location_matrix);
 
             animate(delta_time);
